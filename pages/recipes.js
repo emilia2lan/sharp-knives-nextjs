@@ -10,7 +10,7 @@ export default function Home() {
         </Head>
       </Layout>
       <section>
-        <p>Here is home page</p>
+        <p>Here are your favorite recipes</p>
       </section>
     </>
   );

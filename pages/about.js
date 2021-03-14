@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
 
-export default function Home() {
+export default function About() {
   return (
     <>
       <Layout>
@@ -10,7 +10,7 @@ export default function Home() {
         </Head>
       </Layout>
       <section>
-        <p>Here is home page</p>
+        <p>Here are is about page</p>
       </section>
     </>
   );
