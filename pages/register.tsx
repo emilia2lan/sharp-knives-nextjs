@@ -1,3 +1,4 @@
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 import Layout from '../components/Layout';
@@ -37,13 +38,26 @@ export default function Register() {
   );
 }
 
-export async function getServerSideProps() {
-  const { getUserName } = await import('../util/database');
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const cookie = await import('cookie');
+  const {
+    createSessionFiveMinutesExpiry,
+    deleteAllExpiredSessions,
+  } = await import('../util/database');
 
-  const userName = await getUserName();
+  const { serializeSecureCookieServerSide } = await import('../util/cookies');
+  await deleteAllExpiredSessions();
+  const session = await createSessionFiveMinutesExpiry();
+
+  const sessionCookie = serializeSecureCookieServerSide(
+    'session',
+    session.token,
+    60 * 5,
+  );
+
+  context.res.setHeader('Set-Cookie', sessionCookie);
+
   return {
-    props: {
-      //watches:watches
-    },
+    props: {},
   };
 }

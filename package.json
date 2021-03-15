@@ -11,7 +11,9 @@
   "dependencies": {
     "@emotion/react": "^11.1.5",
     "camelcase-keys": "^6.2.2",
+    "cookie": "^0.4.1",
     "dotenv-safe": "^8.2.0",
+    "js-cookie": "^2.2.1",
     "next": "10.0.6",
     "postgres": "^1.0.2",
     "react": "17.0.1",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@types/camelcase-keys": "^5.1.1",
+    "@types/cookie": "^0.4.0",
     "@types/dotenv-safe": "^8.1.1",
     "@types/node": "14.14.31",
     "@types/react": "17.0.2",
