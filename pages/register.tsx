@@ -1,11 +1,16 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Layout from '../components/Layout';
+import { Error } from '../util/types';
 
 export default function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<Error[]>([]);
+  const router = useRouter();
+
   return (
     <>
       <Layout>
@@ -14,9 +19,27 @@ export default function Register() {
         </Head>
       </Layout>
       <section>
-        <p>Here is login page</p>
+        <p>Here is register page</p>
       </section>
-      <form onSubmit={() => {}}>
+      <form
+        onSubmit={async (event) => {
+          event.preventDefault();
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+          });
+
+          const { user, errors: returnedErrors } = await response.json();
+          if (returnedErrors) {
+            setErrors(returnedErrors);
+            return;
+          }
+          router.push(`/profile/${user.id}`);
+        }}
+      >
         <label>
           username:
           <input
@@ -34,24 +57,34 @@ export default function Register() {
         </label>
         <button type="submit">Register</button>
       </form>
+      {errors.map((error) => (
+        <div style={{ color: 'red' }} key={`error-message-${error.message}`}>
+          {' '}
+          {error.message}
+        </div>
+      ))}
     </>
   );
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const cookie = await import('cookie');
   const {
     createSessionFiveMinutesExpiry,
     deleteAllExpiredSessions,
   } = await import('../util/database');
 
   const { serializeSecureCookieServerSide } = await import('../util/cookies');
-  await deleteAllExpiredSessions();
-  const session = await createSessionFiveMinutesExpiry();
 
+  await deleteAllExpiredSessions();
+
+  // uses the same token for the five minutes interval
+  const token =
+    context.req.cookies.session ||
+    (await createSessionFiveMinutesExpiry()).token;
+  console.log('token', token);
   const sessionCookie = serializeSecureCookieServerSide(
     'session',
-    session.token,
+    token,
     60 * 5,
   );
 
