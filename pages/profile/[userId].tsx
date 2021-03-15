@@ -1,5 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+
 import { User } from '../../util/types';
 
 export default function Profile(props: { user: User }) {
@@ -13,11 +14,11 @@ export default function Profile(props: { user: User }) {
   );
 }
 
+// here you get the to the specific page of each user and is shown the username and the id
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { getUserById } = await import('../../util/database');
 
   const user = await getUserById(context.query.userId);
-  console.log('user', user);
   return {
     props: {
       user: user,

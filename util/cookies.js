@@ -1,4 +1,4 @@
-// For server-side cookies
+// This is server-side cookies
 import cookie from 'cookie';
 
 export function serializeSecureCookieServerSide(

@@ -1,7 +1,9 @@
+import { useState } from 'react';
+
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+
 import Layout from '../components/Layout';
 import { Error } from '../util/types';
 
@@ -37,6 +39,7 @@ export default function Register() {
             setErrors(returnedErrors);
             return;
           }
+          // here renders the user profile page
           router.push(`/profile/${user.id}`);
         }}
       >
@@ -75,13 +78,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const { serializeSecureCookieServerSide } = await import('../util/cookies');
 
+  // clears the DB from expired sessions
   await deleteAllExpiredSessions();
 
-  // uses the same token for the five minutes interval
+  // uses the same token for the five minutes interval per session/user. The session is no longer than 5 minutes.
   const token =
     context.req.cookies.session ||
     (await createSessionFiveMinutesExpiry()).token;
-  console.log('token', token);
+
   const sessionCookie = serializeSecureCookieServerSide(
     'session',
     token,

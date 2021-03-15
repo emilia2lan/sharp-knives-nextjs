@@ -1,5 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
 import postgres from 'postgres';
+
 import { generateToken } from './sessions';
 
 require('dotenv-safe').config();
@@ -11,6 +12,7 @@ function camelcaseRecords(records) {
   return records.map((record) => camelcaseKeys(record));
 }
 
+// Sessions table from DB
 export async function createSessionFiveMinutesExpiry() {
   const token = generateToken();
   const sessions = await sql`
@@ -49,6 +51,7 @@ export async function deleteAllExpiredSessions() {
   return camelcaseRecords(sessions)[0];
 }
 
+// User table from BD
 export async function getUserById(id) {
   const users = await sql`
     SELECT
@@ -85,10 +88,3 @@ export async function createUser(username, passwordHash) {
   `;
   return camelcaseRecords(users)[0];
 }
-
-// export async function createSessionByUserId(userId) {}
-
-// export async function getUserName() {
-//   await sql`SELECT * FROM sharpknives`;
-//   return camelcaseRecords(sharpknives);
-// }

@@ -1,7 +1,15 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { hashPassword } from '../../util/auth';
-import { createUser, getUserByUsername } from '../../util/database';
+import {
+  NextApiRequest,
+  NextApiResponse,
+} from 'next';
 
+import { hashPassword } from '../../util/auth';
+import {
+  createUser,
+  getUserByUsername,
+} from '../../util/database';
+
+// checks if a username already register/exist in DB and show an error message in case there is a match. If no match is found a new registration follows.
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
