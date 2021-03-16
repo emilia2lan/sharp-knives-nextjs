@@ -5,7 +5,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import Layout from '../components/Layout';
-import { isSessionTokenNotExpired } from '../util/database';
 
 type Props = {
   csrfToken: string;
@@ -79,44 +78,25 @@ export default function Login(props: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { default: Tokens } = await import('csrf');
-  const tokens = new Tokens();
-  const {
-    createSessionFiveMinutesExpiry,
-    deleteAllExpiredSessions,
-  } = await import('../util/database');
+  const { createCsrfToken } = await import('../util/auth');
+  const { getValidSessionToken } = await import('../util/sessions');
 
-  const { serializeSecureCookieServerSide } = await import('../util/cookies');
+  const { deleteAllExpiredSessions } = await import('../util/database');
 
   // clears the DB from expired sessions/tokens
   await deleteAllExpiredSessions();
-  // Assume that the session cookie is NOT valid.
-  let isSessionCookieValid = false;
-  let sessionToken = context.req.cookies.session;
 
-  // checks if the session cookie is valid and NOT expired
-  if (sessionToken) {
-    isSessionCookieValid = await isSessionTokenNotExpired(sessionToken);
-  }
-  // if the cookie does NOT exists/valid, it creates a NEW token per session which expires in 5 minutes
-  if (!isSessionCookieValid) {
-    const session = await createSessionFiveMinutesExpiry();
-    sessionToken = session.token;
+  const { sessionToken, sessionCookie } = await getValidSessionToken(
+    context.req.cookies.session,
+  );
 
-    const sessionCookie = serializeSecureCookieServerSide(
-      'sessions',
-      sessionToken,
-      60 * 5,
-    );
-
+  if (sessionCookie) {
     context.res.setHeader('Set-Cookie', sessionCookie);
   }
 
-  // add a level of security to the tokens from sessions
-  const secret = sessionToken + process.env.CSRF_SECRET_SALT;
-  const token = tokens.create(secret);
+  const csrfToken = createCsrfToken(sessionToken);
 
   return {
-    props: { csrfToken: token },
+    props: { csrfToken: csrfToken },
   };
 }

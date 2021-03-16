@@ -96,7 +96,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const session = await createSessionFiveMinutesExpiry();
 
     const sessionCookie = serializeSecureCookieServerSide(
-      'sessions',
+      'session',
       session.token,
       60 * 5,
     );

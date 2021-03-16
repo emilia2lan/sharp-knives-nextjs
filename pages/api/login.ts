@@ -1,18 +1,17 @@
-import Tokens from 'csrf';
-// import {default as Tokens} from 'csrf';
 import {
   NextApiRequest,
   NextApiResponse,
 } from 'next';
 
-import { doesPasswordMatchPasswordHash } from '../../util/auth';
+import {
+  doesCsrfTokenMatchSessionToken,
+  doesPasswordMatchPasswordHash,
+} from '../../util/auth';
 import { serializeSecureCookieServerSide } from '../../util/cookies';
 import {
   createSessionByUserId,
   getUserWithHashedPasswordByUsername,
 } from '../../util/database';
-
-const tokens = new Tokens();
 
 // checks if a username already register/exist in DB and show an error message in case there is a match. If no match is found a new registration follows.
 export default async function handler(
@@ -21,8 +20,8 @@ export default async function handler(
 ) {
   const { username, password, csrfToken } = req.body;
   const sessionToken = req.cookies.session;
-  const secret = sessionToken + process.env.CSRF_SECRET_SALT;
-  if (!tokens.verify(secret, csrfToken)) {
+
+  if (!doesCsrfTokenMatchSessionToken(csrfToken, sessionToken)) {
     return res.status(401).send({
       errors: [{ message: 'CSRF token does not match' }],
       user: null,
