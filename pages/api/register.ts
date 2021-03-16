@@ -28,6 +28,5 @@ export default async function handler(
   const passwordHash = await hashPassword(password);
 
   const user = await createUser(username, passwordHash);
-  console.log('user register.ts', user);
   res.send({ user });
 }

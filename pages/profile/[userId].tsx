@@ -9,7 +9,8 @@ export default function Profile(props: { user: User }) {
       <Head>
         <title>User Profile: {props.user.username}</title>
       </Head>
-      <h1>id: {props.user.id}</h1>
+      <h1>User: {props.user.username}</h1>
+      <h3>id: {props.user.id}</h3>
     </>
   );
 }

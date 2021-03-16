@@ -77,6 +77,17 @@ export async function getUserByUsername(username) {
   return camelcaseRecords(users)[0];
 }
 
+export async function getUserWithHashedPasswordByUsername(username) {
+  const users = await sql`
+    SELECT
+     *
+    FROM
+      users
+    WHERE
+      username = ${username}
+  `;
+  return camelcaseRecords(users)[0];
+}
 export async function createUser(username, passwordHash) {
   const users = await sql`
     INSERT INTO users
