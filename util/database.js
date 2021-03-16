@@ -12,14 +12,40 @@ function camelcaseRecords(records) {
   return records.map((record) => camelcaseKeys(record));
 }
 
-// Sessions table from DB
+// Session table from DB
+export async function isSessionTokenNotExpired(sessionToken) {
+  const sessions = await sql`
+    SELECT
+      *
+    FROM
+      session
+    WHERE
+      token = ${sessionToken} AND
+      expiry > NOW()
+  `;
+  return sessions.length > 0;
+}
+
 export async function createSessionFiveMinutesExpiry() {
   const token = generateToken();
   const sessions = await sql`
-  INSERT INTO sessions(token, expiry)
+  INSERT INTO session(token, expiry)
   VALUES
   (${token}, NOW() + INTERVAL '5 minutes')
   RETURNING *`;
+  return camelcaseRecords(sessions)[0];
+}
+export async function createSessionByUserId(userId) {
+  const token = generateToken();
+
+  const sessions = await sql`
+    INSERT INTO session
+      (token, user_id)
+    VALUES
+      (${token}, ${userId})
+    RETURNING *
+  `;
+
   return camelcaseRecords(sessions)[0];
 }
 
@@ -32,7 +58,7 @@ export async function getSessionByToken(sessionToken) {
     SELECT
       *
     FROM
-      sessions
+      session
     WHERE
       token = ${sessionToken} AND
       expiry > NOW()
@@ -43,7 +69,7 @@ export async function getSessionByToken(sessionToken) {
 export async function deleteAllExpiredSessions() {
   const sessions = await sql`
     DELETE FROM
-      sessions
+      session
     WHERE
       expiry < NOW()
     RETURNING *

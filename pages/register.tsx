@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import Layout from '../components/Layout';
+import { isSessionTokenNotExpired } from '../util/database';
 import { Error } from '../util/types';
 
 export default function Register() {
@@ -80,19 +81,28 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   // clears the DB from expired sessions
   await deleteAllExpiredSessions();
+  // Assume that the session cookie is NOT valid.
+  let isSessionCookieValid = false;
+  const sessionTokenFromCookie = context.req.cookies.session;
 
-  // uses the same token for the five minutes interval per session/user. The session is no longer than 5 minutes.
-  const token =
-    context.req.cookies.session ||
-    (await createSessionFiveMinutesExpiry()).token;
+  // checks if the session cookie is valid and NOT expired
+  if (sessionTokenFromCookie) {
+    isSessionCookieValid = await isSessionTokenNotExpired(
+      sessionTokenFromCookie,
+    );
+  }
+  // if the cookie does NOT exists/valid, it creates a NEW token per session which expires in 5 minutes
+  if (!isSessionCookieValid) {
+    const session = await createSessionFiveMinutesExpiry();
 
-  const sessionCookie = serializeSecureCookieServerSide(
-    'session',
-    token,
-    60 * 5,
-  );
+    const sessionCookie = serializeSecureCookieServerSide(
+      'sessions',
+      session.token,
+      60 * 5,
+    );
 
-  context.res.setHeader('Set-Cookie', sessionCookie);
+    context.res.setHeader('Set-Cookie', sessionCookie);
+  }
 
   return {
     props: {},

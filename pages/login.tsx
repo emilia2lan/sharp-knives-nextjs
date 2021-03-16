@@ -5,8 +5,13 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import Layout from '../components/Layout';
+import { isSessionTokenNotExpired } from '../util/database';
 
-export default function Login() {
+type Props = {
+  csrfToken: string;
+};
+
+export default function Login(props: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Error[]>([]);
@@ -30,7 +35,11 @@ export default function Login() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({
+              username,
+              password,
+              csrfToken: props.csrfToken,
+            }),
           });
 
           const { user, errors: returnedErrors } = await response.json();
@@ -70,6 +79,8 @@ export default function Login() {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { default: Tokens } = await import('csrf');
+  const tokens = new Tokens();
   const {
     createSessionFiveMinutesExpiry,
     deleteAllExpiredSessions,
@@ -77,23 +88,35 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const { serializeSecureCookieServerSide } = await import('../util/cookies');
 
-  // clears the DB from expired sessions
+  // clears the DB from expired sessions/tokens
   await deleteAllExpiredSessions();
+  // Assume that the session cookie is NOT valid.
+  let isSessionCookieValid = false;
+  let sessionToken = context.req.cookies.session;
 
-  // uses the same token for the five minutes interval per session/user. The session is no longer than 5 minutes.
-  const token =
-    context.req.cookies.session ||
-    (await createSessionFiveMinutesExpiry()).token;
+  // checks if the session cookie is valid and NOT expired
+  if (sessionToken) {
+    isSessionCookieValid = await isSessionTokenNotExpired(sessionToken);
+  }
+  // if the cookie does NOT exists/valid, it creates a NEW token per session which expires in 5 minutes
+  if (!isSessionCookieValid) {
+    const session = await createSessionFiveMinutesExpiry();
+    sessionToken = session.token;
 
-  const sessionCookie = serializeSecureCookieServerSide(
-    'session',
-    token,
-    60 * 5,
-  );
+    const sessionCookie = serializeSecureCookieServerSide(
+      'sessions',
+      sessionToken,
+      60 * 5,
+    );
 
-  context.res.setHeader('Set-Cookie', sessionCookie);
+    context.res.setHeader('Set-Cookie', sessionCookie);
+  }
+
+  // add a level of security to the tokens from sessions
+  const secret = sessionToken + process.env.CSRF_SECRET_SALT;
+  const token = tokens.create(secret);
 
   return {
-    props: {},
+    props: { csrfToken: token },
   };
 }

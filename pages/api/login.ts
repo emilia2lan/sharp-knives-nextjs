@@ -1,17 +1,33 @@
+import Tokens from 'csrf';
+// import {default as Tokens} from 'csrf';
 import {
   NextApiRequest,
   NextApiResponse,
 } from 'next';
 
 import { doesPasswordMatchPasswordHash } from '../../util/auth';
-import { getUserWithHashedPasswordByUsername } from '../../util/database';
+import { serializeSecureCookieServerSide } from '../../util/cookies';
+import {
+  createSessionByUserId,
+  getUserWithHashedPasswordByUsername,
+} from '../../util/database';
+
+const tokens = new Tokens();
 
 // checks if a username already register/exist in DB and show an error message in case there is a match. If no match is found a new registration follows.
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { username, password } = req.body;
+  const { username, password, csrfToken } = req.body;
+  const sessionToken = req.cookies.session;
+  const secret = sessionToken + process.env.CSRF_SECRET_SALT;
+  if (!tokens.verify(secret, csrfToken)) {
+    return res.status(401).send({
+      errors: [{ message: 'CSRF token does not match' }],
+      user: null,
+    });
+  }
 
   const userWithPasswordHash = await getUserWithHashedPasswordByUsername(
     username,
@@ -38,8 +54,15 @@ export default async function handler(
     });
   }
 
-  // return to front end only the user name and id, if you return the whole user then you can expose its password. To get away with that, the commented line nr.1 gets helps me to bring only the passwordhash, and the remaining info will be the user.
   // successfully authenticated the user
+  const session = await createSessionByUserId(user.id);
+  // get the cookie from server side to the API routes
+  const sessionCookie = serializeSecureCookieServerSide(
+    'session',
+    session.token,
+  );
+
+  res.setHeader('Set-Cookie', sessionCookie);
   res.send({
     user: user,
   });
