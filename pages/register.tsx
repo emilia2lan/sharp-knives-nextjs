@@ -4,8 +4,6 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import Layout from '../components/Layout';
-import { isSessionTokenNotExpired } from '../util/database';
 import { Error } from '../util/types';
 
 export default function Register() {
@@ -16,11 +14,10 @@ export default function Register() {
 
   return (
     <>
-      <Layout>
-        <Head>
-          <link rel="logo" href="/logoSharpKnives.svg" />
-        </Head>
-      </Layout>
+      <Head>
+        <link rel="logo" href="/logoSharpKnives.svg" />
+      </Head>
+
       <section>
         <p>Here is register page</p>
       </section>
@@ -40,8 +37,12 @@ export default function Register() {
             setErrors(returnedErrors);
             return;
           }
-          // here renders the user profile page
-          router.push(`/profile/${user.id}`);
+
+          const returnTo = Array.isArray(router.query.returnTo)
+            ? router.query.returnTo[0]
+            : router.query.returnTo;
+
+          router.push(returnTo || `/profile/${user.id}`);
         }}
       >
         <label>
@@ -72,39 +73,34 @@ export default function Register() {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const {
-    createSessionFiveMinutesExpiry,
-    deleteAllExpiredSessions,
-  } = await import('../util/database');
+  const { createCsrfToken } = await import('../util/auth');
+  const { getSessionByToken, deleteAllExpiredSessions } = await import(
+    '../util/database'
+  );
+  const { createSessionWithCookie } = await import('../util/sessions');
 
-  const { serializeSecureCookieServerSide } = await import('../util/cookies');
+  let session = await getSessionByToken(context.req.cookies.session);
+  // if the user has already a valid cookie, it gets redirected to homepage and does not allow visiting the login page
+  if (session?.userId) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
 
-  // clears the DB from expired sessions
   await deleteAllExpiredSessions();
-  // Assume that the session cookie is NOT valid.
-  let isSessionCookieValid = false;
-  const sessionTokenFromCookie = context.req.cookies.session;
 
-  // checks if the session cookie is valid and NOT expired
-  if (sessionTokenFromCookie) {
-    isSessionCookieValid = await isSessionTokenNotExpired(
-      sessionTokenFromCookie,
-    );
+  if (!session) {
+    const result = await createSessionWithCookie();
+    session = result.session;
+    context.res.setHeader('Set-Cookie', result.sessionCookie);
   }
-  // if the cookie does NOT exists/valid, it creates a NEW token per session which expires in 5 minutes
-  if (!isSessionCookieValid) {
-    const session = await createSessionFiveMinutesExpiry();
 
-    const sessionCookie = serializeSecureCookieServerSide(
-      'session',
-      session.token,
-      60 * 5,
-    );
-
-    context.res.setHeader('Set-Cookie', sessionCookie);
-  }
+  const csrfToken = createCsrfToken(session.token);
 
   return {
-    props: {},
+    props: { csrfToken: csrfToken },
   };
 }

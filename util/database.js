@@ -66,6 +66,27 @@ export async function getSessionByToken(sessionToken) {
   return camelcaseRecords(sessions)[0];
 }
 
+export async function deleteSessionById(id) {
+  const sessions = await sql`
+    DELETE FROM
+      sessions
+    WHERE
+      id = ${id}
+    RETURNING *
+  `;
+  return camelcaseRecords(sessions)[0];
+}
+export async function deleteSessionByToken(token) {
+  const sessions = await sql`
+    DELETE FROM
+      sessions
+    WHERE
+      token = ${token}
+    RETURNING *
+  `;
+  return camelcaseRecords(sessions)[0];
+}
+
 export async function deleteAllExpiredSessions() {
   const sessions = await sql`
     DELETE FROM

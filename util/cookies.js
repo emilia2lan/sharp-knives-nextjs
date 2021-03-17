@@ -31,6 +31,7 @@ export function serializeSecureCookieServerSide(
   });
 }
 
+// retuns an empty cookie after logout
 export function serializeEmptyCookieServerSide(name) {
   return cookie.serialize(name, '', {
     maxAge: -1,

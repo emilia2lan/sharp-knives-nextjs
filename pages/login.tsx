@@ -4,8 +4,6 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import Layout from '../components/Layout';
-
 type Props = {
   csrfToken: string;
 };
@@ -18,11 +16,10 @@ export default function Login(props: Props) {
 
   return (
     <>
-      <Layout>
-        <Head>
-          <link rel="logo" href="/logoSharpKnives.svg" />
-        </Head>
-      </Layout>
+      <Head>
+        <link rel="logo" href="/logoSharpKnives.svg" />
+      </Head>
+
       <section>
         <p>Here is Login page</p>
       </section>
@@ -46,8 +43,12 @@ export default function Login(props: Props) {
             setErrors(returnedErrors);
             return;
           }
-          // here renders the user profile page
-          router.push(`/profile/${user.id}`);
+
+          const returnTo = Array.isArray(router.query.returnTo)
+            ? router.query.returnTo[0]
+            : router.query.returnTo;
+
+          router.push(returnTo || `/profile/${user.id}`);
         }}
       >
         <label>
@@ -79,22 +80,31 @@ export default function Login(props: Props) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { createCsrfToken } = await import('../util/auth');
-  const { getValidSessionToken } = await import('../util/sessions');
-
-  const { deleteAllExpiredSessions } = await import('../util/database');
-
-  // clears the DB from expired sessions/tokens
-  await deleteAllExpiredSessions();
-
-  const { sessionToken, sessionCookie } = await getValidSessionToken(
-    context.req.cookies.session,
+  const { getSessionByToken, deleteAllExpiredSessions } = await import(
+    '../util/database'
   );
+  const { createSessionWithCookie } = await import('../util/sessions');
 
-  if (sessionCookie) {
-    context.res.setHeader('Set-Cookie', sessionCookie);
+  let session = await getSessionByToken(context.req.cookies.session);
+  // if the user has already a valid cookie, it gets redirected to homepage and does not allow visiting the login page
+  if (session?.userId) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
   }
 
-  const csrfToken = createCsrfToken(sessionToken);
+  await deleteAllExpiredSessions();
+
+  if (!session) {
+    const result = await createSessionWithCookie();
+    session = result.session;
+    context.res.setHeader('Set-Cookie', result.sessionCookie);
+  }
+
+  const csrfToken = createCsrfToken(session.token);
 
   return {
     props: { csrfToken: csrfToken },

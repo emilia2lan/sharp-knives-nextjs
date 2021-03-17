@@ -1,8 +1,9 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 
 const navBar = css`
   display: flex;
@@ -55,14 +56,23 @@ export default function Layout(props) {
           <Link href="/about">
             <a> About </a>
           </Link>
+          <div>
+            {!props.isSessionValid ? (
+              <>
+                <Link href="/register">
+                  <a> Register </a>
+                </Link>
 
-          <Link href="/register">
-            <a> Register </a>
-          </Link>
-
-          <Link href="/login">
-            <a> Login </a>
-          </Link>
+                <Link href="/login">
+                  <a> Login </a>
+                </Link>
+              </>
+            ) : (
+              <Link href="/logout">
+                <a> Logout </a>
+              </Link>
+            )}
+          </div>
         </nav>
       </header>
       {props.children}

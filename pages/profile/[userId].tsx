@@ -1,9 +1,32 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 
-import { User } from '../../util/types';
+import {
+  Error,
+  User,
+} from '../../util/types';
 
-export default function Profile(props: { user: User }) {
+type Props =
+  | {
+      user: User;
+    }
+  | {
+      user: null;
+      errors: Error[];
+    };
+
+export default function Profile(props: Props) {
+  if (!props.user) {
+    return (
+      <>
+        <Head>
+          <title>{props.errors[0].message}</title>
+        </Head>
+        <h1>{props.errors[0].message}</h1>
+      </>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -17,12 +40,21 @@ export default function Profile(props: { user: User }) {
 
 // here you get the to the specific page of each user and is shown the username and the id
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { getUserById } = await import('../../util/database');
+  const { getUserById, getSessionByToken } = await import(
+    '../../util/database'
+  );
+
+  const session = await getSessionByToken(context.req.cookies.session);
+
+  if (!session || session.userId !== Number(context.query.userId)) {
+    return {
+      props: {
+        user: null,
+        errors: [{ message: 'Access denied' }],
+      },
+    };
+  }
 
   const user = await getUserById(context.query.userId);
-  return {
-    props: {
-      user: user,
-    },
-  };
+  return { props: { user: user } };
 }
