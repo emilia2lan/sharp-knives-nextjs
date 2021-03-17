@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import Head, { default as Image } from 'next/head';
 
 export default function GetRecipe(props) {
   const recipe = props.recipe;
@@ -14,7 +14,12 @@ export default function GetRecipe(props) {
 
       <section>
         <h1>{recipe.name}</h1>
-        <div> {recipe.img} </div>
+        <Image
+          src={recipe.img}
+          alt="a picture of the final result of the recipe"
+          width={500}
+          height={500}
+        />
         <div>Instructions: {recipe.instructions}</div>
         <div> Cooking time: {recipe.cookingTime}</div>
         <div> Prep Time: {recipe.prepTime} €</div>

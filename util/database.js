@@ -39,7 +39,7 @@ export async function createSessionByUserId(userId) {
   const token = generateToken();
 
   const sessions = await sql`
-    INSERT INTO sessions
+    INSERT INTO session
       (token, user_id)
     VALUES
       (${token}, ${userId})
@@ -69,7 +69,7 @@ export async function getSessionByToken(sessionToken) {
 export async function deleteSessionById(id) {
   const sessions = await sql`
     DELETE FROM
-      sessions
+      session
     WHERE
       id = ${id}
     RETURNING *
@@ -79,7 +79,7 @@ export async function deleteSessionById(id) {
 export async function deleteSessionByToken(token) {
   const sessions = await sql`
     DELETE FROM
-      sessions
+      session
     WHERE
       token = ${token}
     RETURNING *
