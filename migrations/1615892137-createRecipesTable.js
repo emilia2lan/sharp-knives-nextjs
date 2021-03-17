@@ -1,14 +1,17 @@
 exports.up = async (sql) => {
   await sql`
-	CREATE TABLE sessions
+	CREATE TABLE recipes
 	( id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-	TOKEN VARCHAR(40),
-	EXPIRY TIMESTAMP NOT NULL DEFAULT NOW() + INTERVAL '24 hours'
+	name VARCHAR(100),
+	instructions TEXT,
+	cooking_time INT,
+	prep_time INT,
+	img VARCHAR(50)
 	);
 	`;
 };
 
 exports.down = async (sql) => {
   await sql`
-	DROP TABLE sessions`;
+	DROP TABLE recipes`;
 };

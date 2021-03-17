@@ -39,7 +39,7 @@ export async function createSessionByUserId(userId) {
   const token = generateToken();
 
   const sessions = await sql`
-    INSERT INTO session
+    INSERT INTO sessions
       (token, user_id)
     VALUES
       (${token}, ${userId})
@@ -145,4 +145,18 @@ export async function createUser(username, passwordHash) {
     RETURNING id, username
   `;
   return camelcaseRecords(users)[0];
+}
+// Recipes Table from DB
+export async function getRecipes() {
+  const recipes = await sql` SELECT * FROM recipes`;
+  return camelcaseRecords(recipes);
+}
+
+export async function getRecipesId(id) {
+  const singleRecipe = await sql` SELECT * FROM
+      recipes
+    WHERE
+      id = ${id}`;
+  console.log('id recipe', id);
+  return camelcaseRecords(singleRecipe)[0];
 }
