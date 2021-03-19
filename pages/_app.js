@@ -12,6 +12,7 @@ import Layout from '../components/Layout';
 
 export default function App({ Component, pageProps }) {
   const [isSessionStateStale, setIsSessionStateStale] = useState(true);
+
   const [isSessionValid, setIsSessionValid] = useState(false);
 
   useEffect(() => {
@@ -35,8 +36,6 @@ export default function App({ Component, pageProps }) {
             min-height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
               Oxygen;
-            /* background: papayawhip; */
-            /* font-family: Helvetica, Arial, sans-serif; */
           }
         `}
       />

@@ -42,7 +42,7 @@ export default function Register() {
             ? router.query.returnTo[0]
             : router.query.returnTo;
 
-          router.push(returnTo || `/profile/${user.id}`);
+          router.push(returnTo || `/login`);
         }}
       >
         <label>

@@ -157,6 +157,6 @@ export async function getRecipesId(id) {
       recipes
     WHERE
       id = ${id}`;
-  console.log('id recipe', id);
+
   return camelcaseRecords(singleRecipe)[0];
 }

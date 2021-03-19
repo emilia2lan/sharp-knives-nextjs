@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -10,6 +11,13 @@ export default function Home() {
       <section>
         <p>Here is home page</p>
       </section>
+      <Image
+        className="image"
+        src="/sharpKnives.jpeg"
+        alt="a picture of the final result of the recipe"
+        width={1000}
+        height={1000}
+      />
     </>
   );
 }

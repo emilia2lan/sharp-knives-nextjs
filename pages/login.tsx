@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useState,
+} from 'react';
 
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
@@ -6,6 +10,7 @@ import { useRouter } from 'next/router';
 
 type Props = {
   csrfToken: string;
+  setIsSessionStateStale: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function Login(props: Props) {
@@ -49,6 +54,7 @@ export default function Login(props: Props) {
             : router.query.returnTo;
 
           router.push(returnTo || `/profile/${user.id}`);
+          props.setIsSessionStateStale(true);
         }}
       >
         <label>
