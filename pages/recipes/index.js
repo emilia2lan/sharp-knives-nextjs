@@ -26,8 +26,9 @@ export default function Recipes(props) {
               className="image"
               src={recipe.img}
               alt="a picture of the final result of the recipe"
-              width={300}
+              width={320}
               height={320}
+              resizeMode
             />
             <h1>
               {' '}
