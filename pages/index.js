@@ -8,7 +8,6 @@ export default function Home(props) {
   async function getRandomRecipe() {
     const random = await fetch('/api/recipe');
     const recipeFromServer = await random.json();
-    console.log(recipeFromServer);
     setRandomRecipe(recipeFromServer.item);
   }
 
