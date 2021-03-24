@@ -1,7 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import postgres from 'postgres';
 
-('./sessions');
+import { generateToken } from './sessions';
 
 require('dotenv-safe').config();
 
@@ -147,6 +147,24 @@ export async function createUser(username, passwordHash) {
   return camelcaseRecords(users)[0];
 }
 // Recipes Table from DB
+export async function getRecipes() {
+  const recipes = await sql` SELECT * FROM recipes`;
+  return camelcaseRecords(recipes);
+}
+
+export async function getIngredients() {
+  const ingredients = await sql` SELECT * FROM ingredients`;
+  return ingredients;
+}
+
+export async function getRecipesId(id) {
+  const singleRecipe = await sql` SELECT * FROM
+      recipes
+    WHERE
+      id = ${id}`;
+
+  return camelcaseRecords(singleRecipe)[0];
+}
 
 export async function getRecipeWithIngredients(id) {
   const ingredients = await sql` SELECT

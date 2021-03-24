@@ -20,8 +20,6 @@ export default function Recipes(props) {
 
       <h1>Here are your favorite recipes</h1>
 
-
-
       <section css={section}>
         {props.recipes.map((recipe) => (
           <div key={recipe.id}>
@@ -41,16 +39,23 @@ export default function Recipes(props) {
             </h1>
           </div>
         ))}
+
+        {props.ingredients.map((i) => {
+          return <div key={i.id}> {i.name} </div>;
+        })}
       </section>
     </>
   );
 }
 
 export async function getServerSideProps() {
-  const { getRecipes } = await import('../../util/database.js');
+  const { getRecipes, getIngredients } = await import('../../util/database.js');
   const recipes = await getRecipes();
+  const ingredients = await getIngredients();
+
+  console.log(ingredients, 'ingredients');
 
   return {
-    props: { recipes: recipes },
+    props: { recipes: recipes, ingredients: ingredients || null },
   };
 }
