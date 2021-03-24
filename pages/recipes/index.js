@@ -19,6 +19,9 @@ export default function Recipes(props) {
       </Head>
 
       <h1>Here are your favorite recipes</h1>
+
+
+
       <section css={section}>
         {props.recipes.map((recipe) => (
           <div key={recipe.id}>

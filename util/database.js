@@ -1,7 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import postgres from 'postgres';
 
-import { generateToken } from './sessions';
+('./sessions');
 
 require('dotenv-safe').config();
 
@@ -147,16 +147,40 @@ export async function createUser(username, passwordHash) {
   return camelcaseRecords(users)[0];
 }
 // Recipes Table from DB
-export async function getRecipes() {
-  const recipes = await sql` SELECT * FROM recipes`;
-  return camelcaseRecords(recipes);
-}
 
-export async function getRecipesId(id) {
-  const singleRecipe = await sql` SELECT * FROM
-      recipes
-    WHERE
-      id = ${id}`;
+export async function getRecipeWithIngredients(id) {
+  const ingredients = await sql` SELECT
+  j.id,
+  r.name as r_name,
+  i.name as i_name
+FROM
+  junctionTableRecipes as j,
+  ingredients as i,
+  recipes as r
+WHERE
+  j.id_recipename = r.id
+AND
+  j.id_ingredients = i.id
+AND
+  j.id_recipename = ${id}
+  `;
 
-  return camelcaseRecords(singleRecipe)[0];
+  const recipe = await sql`
+  SELECT * FROM recipes WHERE recipes.id = ${id}
+  `;
+
+  const fullRecipe = {
+    id: recipe[0].id,
+    name: recipe[0].name,
+    instructions: recipe[0].instructions,
+    cookingTime: recipe[0].cooking_time,
+    prepTime: recipe[0].prep_time,
+    image: recipe[0].img,
+
+    ingredients: ingredients.map((i) => {
+      return i.i_name;
+    }),
+  };
+
+  return fullRecipe;
 }

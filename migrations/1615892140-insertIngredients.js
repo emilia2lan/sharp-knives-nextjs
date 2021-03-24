@@ -45,7 +45,9 @@ VALUES
 	('mushrooms'),
 	('fresh basil'),
 	('pesto'),
-	('ham')
+	('ham'),
+  (cream),
+  (scallops)
   ;`;
 };
 

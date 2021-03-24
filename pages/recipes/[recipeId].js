@@ -25,7 +25,7 @@ export default function GetRecipe(props) {
         <section className="container">
           <h1>{recipe.name}</h1>
           <Image
-            src={recipe.img}
+            src={recipe.image}
             alt="a picture of the final result of the recipe"
             width={500}
             height={500}
@@ -33,6 +33,12 @@ export default function GetRecipe(props) {
           <p> Instructions: {recipe.instructions}</p>
           <p> Cooking time: {recipe.cookingTime}</p>
           <p> Prep Time: {recipe.prepTime}</p>
+          <ul>
+            {' '}
+            {recipe.ingredients.map((i) => {
+              return <li key={i}>{i}</li>;
+            })}
+          </ul>
         </section>
       </div>
     </>
@@ -40,14 +46,13 @@ export default function GetRecipe(props) {
 }
 
 export async function getServerSideProps(context) {
-  const { getRecipesId } = await import('../../util/database.js');
-  const singleRecipe = context.query.recipeId;
+  const { getRecipeWithIngredients } = await import('../../util/database.js');
+  const recipeId = context.query.recipeId;
 
-  const recipe = await getRecipesId(singleRecipe);
-
+  const fullRecipe = await getRecipeWithIngredients(recipeId);
   return {
     props: {
-      recipe: recipe || null,
+      recipe: fullRecipe,
     },
   };
 }

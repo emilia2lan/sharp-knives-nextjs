@@ -64,7 +64,7 @@ const junction = [
   },
   {
     id_recipeName: 'Scrambled eggs',
-    id_ingredients: ['eggs'],
+    id_ingredients: ['eggs', 'milk', 'cream', 'butter', 'ham'],
   },
 
   {
