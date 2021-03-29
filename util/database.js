@@ -172,15 +172,15 @@ export async function getRecipeWithIngredients(id) {
   r.name as r_name,
   i.name as i_name
 FROM
-  junctionTableRecipes as j,
+  recipes_ingredients as j,
   ingredients as i,
   recipes as r
 WHERE
-  j.id_recipename = r.id
+  j.recipename = r.id
 AND
-  j.id_ingredients = i.id
+  j.ingredients = i.id
 AND
-  j.id_recipename = ${id}
+  j.recipename = ${id}
   `;
 
   const recipe = await sql`
@@ -202,3 +202,39 @@ AND
 
   return fullRecipe;
 }
+
+export async function getAllRecipes() {
+  const allRecipes = await sql` SELECT
+  recipename,
+  instructions,
+  cooking_time,
+  prep_time,
+  img,
+  json_agg(ingredients)
+  FROM
+  recipes_ingredients,
+  recipes
+ GROUP BY recipename,
+ instructions, cooking_time, prep_time, img;`;
+
+  return allRecipes;
+}
+
+// export async function getIngredientsBySearch(searchQuery) {
+//   const searchedIngredient = await sql` SELECT
+//   j.id,
+//   r.name as r_name,
+//   i.name as i_name
+// FROM
+// recipes_ingredients as j,
+//   ingredients as i,
+//   recipes as r
+// WHERE
+//   j.id_recipename = r.id
+// AND
+//   j.id_ingredients = i.id
+// AND
+// LOWER(i.name) LIKE LOWER(${`%${searchQuery}%`});`;
+
+//   return searchedIngredient;
+// }

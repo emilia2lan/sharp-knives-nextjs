@@ -1,7 +1,7 @@
 const junction = [
   {
-    id_recipeName: 'Mici - the Romanian meat sausages',
-    id_ingredients: [
+    recipeName: 'Mici - the Romanian meat sausages',
+    ingredients: [
       'ground beef',
       'ground pork',
       'beef stock',
@@ -15,8 +15,8 @@ const junction = [
   },
 
   {
-    id_recipeName: 'Homemade Sushi',
-    id_ingredients: [
+    recipeName: 'Homemade Sushi',
+    ingredients: [
       'sheets sushi seaweed',
       'rice',
       'cream cheese',
@@ -27,8 +27,8 @@ const junction = [
   },
 
   {
-    id_recipeName: 'Vietnamese Pho soup',
-    id_ingredients: [
+    recipeName: 'Vietnamese Pho soup',
+    ingredients: [
       'ginger',
       'cloves',
       'beef brisket',
@@ -38,8 +38,8 @@ const junction = [
     ],
   },
   {
-    id_recipeName: 'Hungarian lángos',
-    id_ingredients: [
+    recipeName: 'Hungarian lángos',
+    ingredients: [
       'potatoes',
       'instant yeast',
       'sugar',
@@ -50,8 +50,8 @@ const junction = [
     ],
   },
   {
-    id_recipeName: 'One pot vegan stew with coconut milk',
-    id_ingredients: [
+    recipeName: 'One pot vegan stew with coconut milk',
+    ingredients: [
       'quinoa',
       'red pepper',
       'paprika powder',
@@ -63,13 +63,13 @@ const junction = [
     ],
   },
   {
-    id_recipeName: 'Scrambled eggs',
-    id_ingredients: ['eggs', 'milk', 'cream', 'butter', 'ham'],
+    recipeName: 'Scrambled eggs',
+    ingredients: ['eggs', 'milk', 'butter', 'ham'],
   },
 
   {
-    id_recipeName: 'Homemade pizza',
-    id_ingredients: [
+    recipeName: 'Homemade pizza',
+    ingredients: [
       'all purpose flour',
       'warm water',
       'instant yeast',
@@ -86,27 +86,28 @@ const junction = [
 
 exports.up = async (sql) => {
   await sql`
-	CREATE TABLE junctionTableRecipes( id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-		id_recipeName INT REFERENCES recipes(id),
-		id_ingredients INT REFERENCES ingredients(id)
+	CREATE TABLE recipes_ingredients( id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+		recipeName INT REFERENCES recipes(id),
+		ingredients INT REFERENCES ingredients(id)
 		);`;
 
   for (let i = 0; i < junction.length; i++) {
     const recipeId = await sql`
-	SELECT id FROM recipes WHERE recipes.name = ${junction[i].id_recipeName}`;
+	SELECT id FROM recipes WHERE recipes.name = ${junction[i].recipeName}`;
 
-    for (let j = 0; j < junction[i].id_ingredients.length; j++) {
-      const ingredientsId = await sql`SELECT id FROM ingredients WHERE ingredients.name = ${junction[i].id_ingredients[j]}`;
-      console.log(recipeId);
-      await sql`INSERT INTO junctionTableRecipes (id_recipeName, id_ingredients) VALUES (${recipeId[0].id}, ${ingredientsId[0].id});`;
+    for (let j = 0; j < junction[i].ingredients.length; j++) {
+      const ingredientsId = await sql`SELECT id FROM ingredients WHERE ingredients.name = ${junction[i].ingredients[j]}`;
+      console.log(junction[i].ingredients[j], ingredientsId);
+      // console.log(recipeId, ingredientsId);
+      await sql`INSERT INTO recipes_ingredients (recipeName, ingredients) VALUES (${recipeId[0].id}, ${ingredientsId[0].id});`;
     }
   }
 };
 
 exports.down = async (sql) => {
-  await sql`DELETE FROM junctionTableRecipes
+  await sql`DELETE FROM recipes_ingredients
 `;
 
   await sql`
-	DROP TABLE junctionTableRecipes`;
+	DROP TABLE recipes_ingredients`;
 };

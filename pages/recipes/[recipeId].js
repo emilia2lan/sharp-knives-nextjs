@@ -47,9 +47,11 @@ export default function GetRecipe(props) {
 
 export async function getServerSideProps(context) {
   const { getRecipeWithIngredients } = await import('../../util/database.js');
+
   const recipeId = context.query.recipeId;
 
   const fullRecipe = await getRecipeWithIngredients(recipeId);
+
   return {
     props: {
       recipe: fullRecipe,

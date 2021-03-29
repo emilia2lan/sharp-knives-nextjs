@@ -61,14 +61,6 @@ const insertRecipesToRecipesTable = [
     prep_time: '195',
     img: '/pizza.jpg',
   },
-
-  {
-    name: 'Hungarian lángos',
-    instructions: 'zxc ',
-    cooking_time: '5',
-    prep_time: '10',
-    img: '/langos.jpg',
-  },
 ];
 
 exports.up = async (sql) => {

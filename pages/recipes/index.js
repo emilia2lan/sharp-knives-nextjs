@@ -22,7 +22,7 @@ export default function Recipes(props) {
 
       <section css={section}>
         {props.recipes.map((recipe) => (
-          <div key={recipe.id}>
+          <div key={recipe.name}>
             <Image
               className="image"
               src={recipe.img}
@@ -40,22 +40,23 @@ export default function Recipes(props) {
           </div>
         ))}
 
-        {props.ingredients.map((i) => {
+        {/* {props.ingredients.map((i) => {
           return <div key={i.id}> {i.name} </div>;
-        })}
+        })} */}
       </section>
     </>
   );
 }
 
 export async function getServerSideProps() {
-  const { getRecipes, getIngredients } = await import('../../util/database.js');
-  const recipes = await getRecipes();
-  const ingredients = await getIngredients();
+  const { getAllRecipes, getRecipes } = await import('../../util/database.js');
 
-  console.log(ingredients, 'ingredients');
+  const recipes = await getRecipes();
+  const searchIngredients = await getAllRecipes();
+
+  // const ingredients = await getIngredients();
 
   return {
-    props: { recipes: recipes, ingredients: ingredients || null },
+    props: { recipes: recipes, searchIngredients: searchIngredients },
   };
 }
