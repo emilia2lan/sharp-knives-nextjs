@@ -203,38 +203,56 @@ AND
   return fullRecipe;
 }
 
-export async function getAllRecipes() {
-  const allRecipes = await sql` SELECT
-  recipename,
-  instructions,
-  cooking_time,
-  prep_time,
-  img,
-  json_agg(ingredients)
-  FROM
-  recipes_ingredients,
-  recipes
- GROUP BY recipename,
- instructions, cooking_time, prep_time, img;`;
+// export async function getAllRecipes() {
+//   const allRecipes = await sql` SELECT
+//   recipename,
+//   instructions,
+//   cooking_time,
+//   prep_time,
+//   img,
+//   json_agg(ingredients)
+//   FROM
+//   recipes_ingredients,
+//   recipes
+//  GROUP BY recipename,
+//  instructions, cooking_time, prep_time, img;`;
 
-  return allRecipes;
+//   return allRecipes;
+// }
+
+export async function getIngredientsBySearch(searchQuery) {
+  const searchedIngredient = await sql` SELECT
+  j.id,
+  r.name as r_name,
+  i.name as i_name
+FROM
+  recipes_ingredients as j,
+  ingredients as i,
+  recipes as r
+WHERE
+  j.recipename = r.id
+AND
+  j.ingredients = i.id
+AND
+LOWER(i.name) LIKE LOWER(${`%${searchQuery}%`});`;
+
+  return searchedIngredient;
 }
 
-// export async function getIngredientsBySearch(searchQuery) {
-//   const searchedIngredient = await sql` SELECT
-//   j.id,
-//   r.name as r_name,
-//   i.name as i_name
-// FROM
-// recipes_ingredients as j,
-//   ingredients as i,
-//   recipes as r
-// WHERE
-//   j.id_recipename = r.id
-// AND
-//   j.id_ingredients = i.id
-// AND
-// LOWER(i.name) LIKE LOWER(${`%${searchQuery}%`});`;
+export async function getRecipesAndIngredients() {
+  const searchedIngredientAndRecipes = await sql` SELECT
+  j.id,
+  r.name as r_name,
+  i.name as i_name
+FROM
+  recipes_ingredients as j,
+  ingredients as i,
+  recipes as r
+WHERE
+  j.recipename = r.id
+AND
+  j.ingredients = i.id
+`;
 
-//   return searchedIngredient;
-// }
+  return searchedIngredientAndRecipes;
+}

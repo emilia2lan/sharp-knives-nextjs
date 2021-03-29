@@ -1,3 +1,8 @@
+import {
+  useEffect,
+  useState,
+} from 'react';
+
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,6 +17,33 @@ const section = css`
   object-fit: cover;
 `;
 export default function Recipes(props) {
+  const [
+    recipesWithIngredientsState,
+    setRecipesWithIngredientsState,
+  ] = useState([]);
+
+  const [searchValue, setSearchValue] = useState('');
+
+  useEffect(() => {
+    const entireRecipes = props.recipes
+      .map((recipe) => {
+        recipe.ingredients = props.fullRecipes
+          .map((fullRecipe) => {
+            if (fullRecipe.r_name === recipe.name) {
+              return fullRecipe.i_name;
+            }
+            return undefined;
+          })
+          .filter((r) => r !== undefined);
+
+        return recipe;
+      })
+      .filter((fullRecipe) =>
+        fullRecipe.name.toLowerCase().includes(searchValue.toLowerCase()),
+      );
+    setRecipesWithIngredientsState(entireRecipes);
+  }, [props.recipes, props.fullRecipes, searchValue]);
+
   return (
     <>
       <Head>
@@ -19,9 +51,23 @@ export default function Recipes(props) {
       </Head>
 
       <h1>Here are your favorite recipes</h1>
+      <input
+        type="text"
+        value={searchValue}
+        onChange={(event) => {
+          setSearchValue(event.target.value);
+        }}
+        name="searchBar"
+        id="searchBar"
+        placeholder="search for an ingredient"
+      />
+      <button type="submit" value="Search">
+        {' '}
+        Search
+      </button>
 
       <section css={section}>
-        {props.recipes.map((recipe) => (
+        {recipesWithIngredientsState.map((recipe) => (
           <div key={recipe.name}>
             <Image
               className="image"
@@ -39,24 +85,24 @@ export default function Recipes(props) {
             </h1>
           </div>
         ))}
-
-        {/* {props.ingredients.map((i) => {
-          return <div key={i.id}> {i.name} </div>;
-        })} */}
       </section>
     </>
   );
 }
 
 export async function getServerSideProps() {
-  const { getAllRecipes, getRecipes } = await import('../../util/database.js');
+  const { getRecipesAndIngredients, getRecipes } = await import(
+    '../../util/database.js'
+  );
 
-  const recipes = await getRecipes();
-  const searchIngredients = await getAllRecipes();
+  const recipesWithoutIngredients = await getRecipes();
 
-  // const ingredients = await getIngredients();
+  const ingredientsAndRecipe = await getRecipesAndIngredients();
 
   return {
-    props: { recipes: recipes, searchIngredients: searchIngredients },
+    props: {
+      recipes: recipesWithoutIngredients,
+      fullRecipes: ingredientsAndRecipe,
+    },
   };
 }
