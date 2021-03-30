@@ -38,9 +38,16 @@ export default function Recipes(props) {
 
         return recipe;
       })
-      .filter((fullRecipe) =>
-        fullRecipe.name.toLowerCase().includes(searchValue.toLowerCase()),
-      );
+
+      .filter((fullRecipe) => {
+        return (
+          fullRecipe.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          fullRecipe.ingredients.find((ingredient) => {
+            return ingredient.toLowerCase().includes(searchValue.toLowerCase());
+          })
+        );
+      });
+
     setRecipesWithIngredientsState(entireRecipes);
   }, [props.recipes, props.fullRecipes, searchValue]);
 
