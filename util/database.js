@@ -203,42 +203,6 @@ AND
   return fullRecipe;
 }
 
-// export async function getAllRecipes() {
-//   const allRecipes = await sql` SELECT
-//   recipename,
-//   instructions,
-//   cooking_time,
-//   prep_time,
-//   img,
-//   json_agg(ingredients)
-//   FROM
-//   recipes_ingredients,
-//   recipes
-//  GROUP BY recipename,
-//  instructions, cooking_time, prep_time, img;`;
-
-//   return allRecipes;
-// }
-
-export async function getIngredientsBySearch(searchQuery) {
-  const searchedIngredient = await sql` SELECT
-  j.id,
-  r.name as r_name,
-  i.name as i_name
-FROM
-  recipes_ingredients as j,
-  ingredients as i,
-  recipes as r
-WHERE
-  j.recipename = r.id
-AND
-  j.ingredients = i.id
-AND
-LOWER(i.name) LIKE LOWER(${`%${searchQuery}%`});`;
-
-  return searchedIngredient;
-}
-
 export async function getRecipesAndIngredients() {
   const searchedIngredientAndRecipes = await sql` SELECT
   j.id,
@@ -256,3 +220,40 @@ AND
 
   return searchedIngredientAndRecipes;
 }
+
+// Favorite function to DB
+export async function getFavorite(id) {
+  if (!favorite) {
+    return undefined;
+  }
+  const favorite = await sql` SELECT * FROM
+      users_recipes
+    WHERE
+      user_id = ${id}
+    `;
+
+  return camelcaseRecords(favorite)[0];
+}
+
+export async function deleteFavorite(id, recipe) {
+  const favorite = await sql`
+    INSERT INTO users_recipes
+    (user_id, recipe_id)
+    VALUES
+    (${id}, ${recipe})
+    RETURNING *
+  `;
+  return camelcaseRecords(favorite)[0];
+
+
+export async function deleteFavorite(id, recipe) {
+  const favorite = await sql`
+    DELETE FROM
+      users_recipes
+    WHERE
+    user_id = ${id}
+    AND
+    recipe_id = ${recipe}
+    RETURNING *
+  `;
+  return camelcaseRecords(favorite)[0];

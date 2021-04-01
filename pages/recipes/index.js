@@ -68,10 +68,6 @@ export default function Recipes(props) {
         id="searchBar"
         placeholder="search for an ingredient"
       />
-      <button type="submit" value="Search">
-        {' '}
-        Search
-      </button>
 
       <section css={section}>
         {recipesWithIngredientsState.map((recipe) => (
@@ -84,6 +80,7 @@ export default function Recipes(props) {
               height={320}
               resizeMode
             />
+            <button type="button"> {recipe.id % 2 ? '🖤' : '💖'} </button>
             <h1>
               {' '}
               <Link className="link" href={`/recipes/${recipe.id}`}>
