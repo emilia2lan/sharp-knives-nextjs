@@ -22,7 +22,7 @@ export default async function handler(
   if (userAlreadyExist) {
     return res
       .status(409)
-      .send({ errors: [{ message: 'User already exist' }], user: null });
+      .send({ errors: [{ message: 'User already exists' }], user: null });
   }
 
   const passwordHash = await hashPassword(password);

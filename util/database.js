@@ -223,28 +223,28 @@ AND
 
 // Favorite function to DB
 export async function getFavorite(id) {
-  if (!favorite) {
-    return undefined;
-  }
   const favorite = await sql` SELECT * FROM
       users_recipes
     WHERE
       user_id = ${id}
     `;
-
+  if (!favorite) {
+    return undefined;
+  }
   return camelcaseRecords(favorite)[0];
 }
 
-export async function deleteFavorite(id, recipe) {
-  const favorite = await sql`
+export async function addFavorite(id, recipe) {
+  const addFavoriteRecipe = await sql`
     INSERT INTO users_recipes
-    (user_id, recipe_id)
+    (user_id, recipes_id)
     VALUES
     (${id}, ${recipe})
     RETURNING *
   `;
-  return camelcaseRecords(favorite)[0];
 
+  return camelcaseRecords(addFavoriteRecipe)[0];
+}
 
 export async function deleteFavorite(id, recipe) {
   const favorite = await sql`
@@ -253,7 +253,21 @@ export async function deleteFavorite(id, recipe) {
     WHERE
     user_id = ${id}
     AND
-    recipe_id = ${recipe}
+    recipes_id = ${recipe}
     RETURNING *
   `;
   return camelcaseRecords(favorite)[0];
+}
+
+export async function getUserByToken(token) {
+  const users = await sql`
+    SELECT
+     user_id
+    FROM
+      session
+    WHERE
+      token = ${token}
+  `;
+
+  return camelcaseRecords(users)[0];
+}

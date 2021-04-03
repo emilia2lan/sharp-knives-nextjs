@@ -10,6 +10,8 @@ import Link from 'next/link';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
+import { getUserByToken } from '../../util/database.js';
+
 const section = css`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -23,6 +25,20 @@ export default function Recipes(props) {
   ] = useState([]);
 
   const [searchValue, setSearchValue] = useState('');
+
+  async function handleClickFavorite(recipeId, userId) {
+    const response = await fetch('/api/add-favorite', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        recipeId,
+        userId,
+      }),
+    });
+    return response;
+  }
 
   useEffect(() => {
     const entireRecipes = props.recipes
@@ -80,7 +96,15 @@ export default function Recipes(props) {
               height={320}
               resizeMode
             />
-            <button type="button"> {recipe.id % 2 ? '🖤' : '💖'} </button>
+            <button
+              type="button"
+              onClick={() => {
+                handleClickFavorite(recipe.id, props.userId);
+              }}
+            >
+              {' '}
+              {recipe.id % 2 ? '🖤' : '💖'}{' '}
+            </button>
             <h1>
               {' '}
               <Link className="link" href={`/recipes/${recipe.id}`}>
@@ -94,7 +118,7 @@ export default function Recipes(props) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   const { getRecipesAndIngredients, getRecipes } = await import(
     '../../util/database.js'
   );
@@ -102,11 +126,15 @@ export async function getServerSideProps() {
   const recipesWithoutIngredients = await getRecipes();
 
   const ingredientsAndRecipe = await getRecipesAndIngredients();
+  const nextCookies = require('next-cookies');
+  const token = nextCookies(context).session;
+  const user = await getUserByToken(token);
 
   return {
     props: {
       recipes: recipesWithoutIngredients,
       fullRecipes: ingredientsAndRecipe,
+      userId: user.userId,
     },
   };
 }

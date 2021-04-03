@@ -46,8 +46,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const session = await getSessionByToken(context.req.cookies.session);
 
-
-
   if (!session || session.userId !== Number(context.query.userId)) {
     return {
       props: {
