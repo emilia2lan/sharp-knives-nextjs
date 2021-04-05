@@ -1,5 +1,3 @@
-// import { getFavorite } from '../../util/database';
-
 import { addFavorite } from '../../util/database';
 
 export default async function handler(req, res) {
