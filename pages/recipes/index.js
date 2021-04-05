@@ -32,11 +32,10 @@ export default function Recipes(props) {
   const [favorites, setFavorites] = useState(props.favorites);
 
   async function handleClickFavorite(recipeId, userId) {
-    console.log(favorites, 'fav');
     const containFavorite = favorites.find((favorite) => {
       return favorite.userId === userId && favorite.recipesId === recipeId;
     });
-    console.log(containFavorite, 'contain fv');
+
     if (containFavorite) {
       const response = await fetch('/api/delete-favorite', {
         method: 'DELETE',
@@ -51,7 +50,6 @@ export default function Recipes(props) {
 
       const deleteFavorite = await response.json();
 
-      console.log(deleteFavorite, 'deletefv');
       setFavorites(
         favorites.filter((favorite) => {
           return (
@@ -73,7 +71,6 @@ export default function Recipes(props) {
       });
 
       const addFavorite = await response.json();
-      console.log(addFavorite, 'addefv');
       favorites.push(addFavorite);
     }
   }

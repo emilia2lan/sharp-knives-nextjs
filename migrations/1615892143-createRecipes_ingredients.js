@@ -97,8 +97,6 @@ exports.up = async (sql) => {
 
     for (let j = 0; j < junction[i].ingredients.length; j++) {
       const ingredientsId = await sql`SELECT id FROM ingredients WHERE ingredients.name = ${junction[i].ingredients[j]}`;
-      // console.log(junction[i].ingredients[j], ingredientsId);
-
       await sql`INSERT INTO recipes_ingredients (recipeName, ingredients) VALUES (${recipeId[0].id}, ${ingredientsId[0].id});`;
     }
   }
