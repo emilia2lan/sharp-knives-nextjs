@@ -223,15 +223,15 @@ AND
 
 // Favorite function to DB
 export async function getFavorite(id) {
-  const favorite = await sql` SELECT * FROM
+  const favorites = await sql` SELECT * FROM
       users_recipes
     WHERE
       user_id = ${id}
     `;
-  if (!favorite) {
+  if (!favorites) {
     return undefined;
   }
-  return camelcaseRecords(favorite)[0];
+  return camelcaseRecords(favorites);
 }
 
 export async function addFavorite(id, recipe) {

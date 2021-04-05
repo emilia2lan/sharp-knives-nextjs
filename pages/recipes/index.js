@@ -10,7 +10,10 @@ import Link from 'next/link';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { getUserByToken } from '../../util/database.js';
+import {
+  getFavorite,
+  getUserByToken,
+} from '../../util/database.js';
 
 const section = css`
   display: grid;
@@ -26,18 +29,53 @@ export default function Recipes(props) {
 
   const [searchValue, setSearchValue] = useState('');
 
+  const [favorites, setFavorites] = useState(props.favorites);
+
   async function handleClickFavorite(recipeId, userId) {
-    const response = await fetch('/api/add-favorite', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        recipeId,
-        userId,
-      }),
+    console.log(favorites, 'fav');
+    const containFavorite = favorites.find((favorite) => {
+      return favorite.userId === userId && favorite.recipesId === recipeId;
     });
-    return response;
+    console.log(containFavorite, 'contain fv');
+    if (containFavorite) {
+      const response = await fetch('/api/delete-favorite', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipeId,
+          userId,
+        }),
+      });
+
+      const deleteFavorite = await response.json();
+
+      console.log(deleteFavorite, 'deletefv');
+      setFavorites(
+        favorites.filter((favorite) => {
+          return (
+            favorite.userId !== deleteFavorite.userId &&
+            favorite.recipesId !== deleteFavorite.recipesId
+          );
+        }),
+      );
+    } else {
+      const response = await fetch('/api/add-favorite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipeId,
+          userId,
+        }),
+      });
+
+      const addFavorite = await response.json();
+      console.log(addFavorite, 'addefv');
+      favorites.push(addFavorite);
+    }
   }
 
   useEffect(() => {
@@ -129,12 +167,13 @@ export async function getServerSideProps(context) {
   const nextCookies = require('next-cookies');
   const token = nextCookies(context).session;
   const user = await getUserByToken(token);
-
+  const favorites = await getFavorite(user.userId);
   return {
     props: {
       recipes: recipesWithoutIngredients,
       fullRecipes: ingredientsAndRecipe,
       userId: user.userId,
+      favorites: favorites,
     },
   };
 }
