@@ -234,6 +234,18 @@ export async function getFavorite(id) {
   return camelcaseRecords(favorites);
 }
 
+export async function getFavoriteRecipesUser(id) {
+  const favorites = await sql` SELECT * FROM
+      users_recipes
+    WHERE
+    user_id = ${id}
+    `;
+  if (!favorites) {
+    return undefined;
+  }
+  return camelcaseRecords(favorites);
+}
+
 export async function addFavorite(id, recipe) {
   const addFavoriteRecipe = await sql`
     INSERT INTO users_recipes

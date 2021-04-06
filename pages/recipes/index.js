@@ -30,12 +30,11 @@ export default function Recipes(props) {
   const [searchValue, setSearchValue] = useState('');
 
   const [favorites, setFavorites] = useState(props.favorites);
-
   async function handleClickFavorite(recipeId, userId) {
     const containFavorite = favorites.find((favorite) => {
       return favorite.userId === userId && favorite.recipesId === recipeId;
     });
-
+    console.log(props.favorites, 'pops');
     if (containFavorite) {
       const response = await fetch('/api/delete-favorite', {
         method: 'DELETE',
@@ -49,15 +48,14 @@ export default function Recipes(props) {
       });
 
       const deleteFavorite = await response.json();
+      const favoritesFiltered = favorites.filter((favorite) => {
+        return (
+          favorite.userId === deleteFavorite.userId &&
+          favorite.recipesId !== deleteFavorite.recipeId
+        );
+      });
 
-      setFavorites(
-        favorites.filter((favorite) => {
-          return (
-            favorite.userId !== deleteFavorite.userId &&
-            favorite.recipesId !== deleteFavorite.recipesId
-          );
-        }),
-      );
+      setFavorites(favoritesFiltered);
     } else {
       const response = await fetch('/api/add-favorite', {
         method: 'POST',
@@ -71,7 +69,9 @@ export default function Recipes(props) {
       });
 
       const addFavorite = await response.json();
-      favorites.push(addFavorite);
+      const copyFavorites = [...favorites];
+      copyFavorites.push(addFavorite);
+      setFavorites(copyFavorites);
     }
   }
 
@@ -107,7 +107,6 @@ export default function Recipes(props) {
       <Head>
         <link rel="logo" href="/logoSharpKnives.svg" />
       </Head>
-
       <h1>Here are your favorite recipes</h1>
       <input
         type="text"
@@ -137,8 +136,11 @@ export default function Recipes(props) {
                 handleClickFavorite(recipe.id, props.userId);
               }}
             >
-              {' '}
-              {recipe.id % 2 ? '🖤' : '💖'}{' '}
+              {favorites.find((favorite) => {
+                return favorite.recipesId === recipe.id;
+              })
+                ? '💖'
+                : '🖤'}
             </button>
             <h1>
               {' '}

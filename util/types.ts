@@ -3,6 +3,11 @@ export type Error = {
 };
 
 export type User = {
-  id: number;
+  userId: number;
   username: string;
+};
+
+export type Favorites = {
+  userId: number;
+  recipesId: number;
 };

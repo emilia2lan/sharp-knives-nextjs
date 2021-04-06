@@ -1,21 +1,11 @@
-import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 
 import {
-  Error,
-  User,
-} from '../../util/types';
+  getFavoriteRecipesUser,
+  getRecipesAndIngredients,
+} from '../../util/database';
 
-type Props =
-  | {
-      user: User;
-    }
-  | {
-      user: null;
-      errors: Error[];
-    };
-
-export default function Profile(props: Props) {
+export default function Profile(props) {
   if (!props.user) {
     return (
       <>
@@ -34,12 +24,15 @@ export default function Profile(props: Props) {
       </Head>
       <h1>User: {props.user.username}</h1>
       <h3>id: {props.user.id}</h3>
+      {props.favorites.map((recipe) => {
+        return <div key={recipe.id}>{recipe.recipesId}</div>;
+      })}
     </>
   );
 }
 
 // here you get the to the specific page of each user and is shown the username and the id
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps(context) {
   const { getUserById, getSessionByToken } = await import(
     '../../util/database'
   );
@@ -56,5 +49,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const user = await getUserById(context.query.userId);
-  return { props: { user: user } };
+  const ingredientsAndRecipe = await getRecipesAndIngredients();
+
+  const favorites = await getFavoriteRecipesUser(user.id);
+
+  console.log(favorites, ' favorite profile');
+  console.log(user, ' favorite profile');
+  // console.log(ingredientsAndRecipe, ' recipes profile');
+  return {
+    props: {
+      user: user,
+      fullRecipes: ingredientsAndRecipe,
+      favorites: favorites,
+    },
+  };
 }
