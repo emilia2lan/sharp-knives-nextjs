@@ -1,4 +1,6 @@
 import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
 
 import {
   getRecipesAndIngredients,
@@ -23,9 +25,21 @@ export default function Profile(props) {
         <title>User Profile: {props.user.username}</title>
       </Head>
       <h1>User: {props.user.username}</h1>
-      <h3>id: {props.user.id}</h3>
+
       {props.favorites.map((recipe) => {
-        return <div key={recipe.id}>{recipe.name}</div>;
+        console.log('recipe', recipe);
+        return (
+          <div key={recipe.recipesId}>
+            <Image src={recipe.img} alt="" width={300} height={300} />
+            <Link
+              className="link"
+              key={recipe.recipesId}
+              href={`/recipes/${recipe.recipesId}`}
+            >
+              <a>{recipe.name}</a>
+            </Link>{' '}
+          </div>
+        );
       })}
     </>
   );
