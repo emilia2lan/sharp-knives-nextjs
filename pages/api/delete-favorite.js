@@ -5,4 +5,5 @@ export default async function handler(req, res) {
 
   const deleteFavoriteRecipe = await deleteFavorite(userId, recipeId);
   res.status(200).send({ userId: userId, recipeId: recipeId });
+  return deleteFavoriteRecipe;
 }

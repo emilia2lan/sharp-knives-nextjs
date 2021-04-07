@@ -20,14 +20,12 @@ export default async function handler(
 ) {
   const { username, password, csrfToken } = req.body;
   const sessionToken = req.cookies.session;
-
   if (!doesCsrfTokenMatchSessionToken(csrfToken, sessionToken)) {
     return res.status(401).send({
       errors: [{ message: 'CSRF token does not match' }],
       user: null,
     });
   }
-
   const userWithPasswordHash = await getUserWithHashedPasswordByUsername(
     username,
   );

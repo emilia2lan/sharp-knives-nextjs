@@ -32,6 +32,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   await deleteSessionByToken(context.req.cookies.session);
   const emptyCookie = serializeEmptyCookieServerSide('session');
   context.res.setHeader('Set-Cookie', emptyCookie);
-  3;
+
   return { props: {} };
 }

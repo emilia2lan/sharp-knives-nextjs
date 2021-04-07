@@ -119,7 +119,6 @@ export default function Recipes(props) {
         id="searchBar"
         placeholder="search for an ingredient"
       />
-
       <section css={section}>
         {recipesWithIngredientsState.map((recipe) => (
           <div key={recipe.name}>

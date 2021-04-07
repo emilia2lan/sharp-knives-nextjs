@@ -43,7 +43,7 @@ export default function Login(props: Props) {
             }),
           });
 
-          const { user, errors: returnedErrors } = await response.json();
+          const { errors: returnedErrors } = await response.json();
           if (returnedErrors) {
             setErrors(returnedErrors);
             return;
