@@ -6,6 +6,7 @@ import {
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -28,13 +29,13 @@ export default function Recipes(props) {
   ] = useState([]);
 
   const [searchValue, setSearchValue] = useState('');
-
+  const router = useRouter();
   const [favorites, setFavorites] = useState(props.favorites);
   async function handleClickFavorite(recipeId, userId) {
     const containFavorite = favorites.find((favorite) => {
       return favorite.userId === userId && favorite.recipesId === recipeId;
     });
-    console.log(props.favorites, 'pops');
+
     if (containFavorite) {
       const response = await fetch('/api/delete-favorite', {
         method: 'DELETE',
@@ -133,6 +134,11 @@ export default function Recipes(props) {
             <button
               type="button"
               onClick={() => {
+                if (!props.isSessionValid) {
+                  alert('please log in');
+                  router.push('/login');
+                  return;
+                }
                 handleClickFavorite(recipe.id, props.userId);
               }}
             >
@@ -166,12 +172,19 @@ export async function getServerSideProps(context) {
   const nextCookies = require('next-cookies');
   const token = nextCookies(context).session;
   const user = await getUserByToken(token);
-  const favorites = await getFavorite(user.userId);
+  let favorites;
+  if (!user) {
+    favorites = [];
+  } else if (user) {
+    favorites = await getFavorite(user.userId);
+  }
+
+  // const favorites = await getFavorite(user.userId);
   return {
     props: {
       recipes: recipesWithoutIngredients,
       fullRecipes: ingredientsAndRecipe,
-      userId: user.userId,
+      userId: user ? user.userId : null,
       favorites: favorites,
     },
   };

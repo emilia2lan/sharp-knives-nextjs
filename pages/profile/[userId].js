@@ -53,9 +53,6 @@ export async function getServerSideProps(context) {
 
   const favorites = await getFavoriteRecipesUser(user.id);
 
-  console.log(favorites, ' favorite profile');
-  console.log(user, ' favorite profile');
-  // console.log(ingredientsAndRecipe, ' recipes profile');
   return {
     props: {
       user: user,

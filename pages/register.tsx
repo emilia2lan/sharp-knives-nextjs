@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useState,
+} from 'react';
 
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
@@ -6,7 +10,10 @@ import { useRouter } from 'next/router';
 
 import { Error } from '../util/types';
 
-export default function Register() {
+type Props = {
+  setIsSessionStateStale: Dispatch<SetStateAction<boolean>>;
+};
+export default function Register(props: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Error[]>([]);
@@ -43,6 +50,7 @@ export default function Register() {
             : router.query.returnTo;
 
           router.push(returnTo || `/login`);
+          props.setIsSessionStateStale(true);
         }}
       >
         <label>

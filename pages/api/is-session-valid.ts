@@ -12,5 +12,7 @@ export default async function handler(
   const isSessionValid = Boolean(
     (await getSessionByToken(req.cookies.session))?.userId,
   );
-  res.send({ isSessionValid: isSessionValid });
+  const userId = (await getSessionByToken(req.cookies.session))?.userId;
+
+  res.send({ isSessionValid: isSessionValid, userId: userId });
 }

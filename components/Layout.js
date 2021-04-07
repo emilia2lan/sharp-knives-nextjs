@@ -68,9 +68,15 @@ export default function Layout(props) {
                 </Link>
               </>
             ) : (
-              <Link href="/logout">
-                <a> Logout </a>
-              </Link>
+              <>
+                <Link href="/logout">
+                  <a> Logout </a>
+                </Link>
+
+                <Link href={`/profile/${props.children.props.userId}`}>
+                  <a> My profile </a>
+                </Link>
+              </>
             )}
           </div>
         </nav>

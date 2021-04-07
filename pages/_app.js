@@ -3,6 +3,8 @@ import {
   useState,
 } from 'react';
 
+import { useRouter } from 'next/router';
+
 import {
   css,
   Global,
@@ -12,19 +14,27 @@ import Layout from '../components/Layout';
 
 export default function App({ Component, pageProps }) {
   const [isSessionStateStale, setIsSessionStateStale] = useState(true);
-
+  const [userId, setUserId] = useState(null);
   const [isSessionValid, setIsSessionValid] = useState(false);
+
+  const router = useRouter();
+
+
 
   useEffect(() => {
     async function fetchData() {
       const response = await fetch('/api/is-session-valid');
-      const newValue = (await response.json()).isSessionValid;
+      const data = await response.json();
+      const newValue = data.isSessionValid;
+      const userIdProfile = data.userId;
+
+      setUserId(userIdProfile);
       setIsSessionValid(newValue);
       setIsSessionStateStale(false);
     }
 
     if (isSessionStateStale) fetchData();
-  }, [isSessionStateStale]);
+  }, [isSessionStateStale, router.pathname]);
 
   return (
     <>
@@ -43,6 +53,8 @@ export default function App({ Component, pageProps }) {
         <Component
           {...pageProps}
           setIsSessionStateStale={setIsSessionStateStale}
+          isSessionValid={isSessionValid}
+          userId={userId}
         />
       </Layout>
     </>

@@ -53,7 +53,7 @@ export default function Login(props: Props) {
             ? router.query.returnTo[0]
             : router.query.returnTo;
 
-          router.push(returnTo || `/profile/${user.id}`);
+          router.push(returnTo || `/recipes`);
           props.setIsSessionStateStale(true);
         }}
       >
