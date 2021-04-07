@@ -1,8 +1,8 @@
 import Head from 'next/head';
 
 import {
-  getFavoriteRecipesUser,
   getRecipesAndIngredients,
+  getRecipesAndIngredientsSetFavoriteUser,
 } from '../../util/database';
 
 export default function Profile(props) {
@@ -25,7 +25,7 @@ export default function Profile(props) {
       <h1>User: {props.user.username}</h1>
       <h3>id: {props.user.id}</h3>
       {props.favorites.map((recipe) => {
-        return <div key={recipe.id}>{recipe.recipesId}</div>;
+        return <div key={recipe.id}>{recipe.name}</div>;
       })}
     </>
   );
@@ -51,7 +51,7 @@ export async function getServerSideProps(context) {
   const user = await getUserById(context.query.userId);
   const ingredientsAndRecipe = await getRecipesAndIngredients();
 
-  const favorites = await getFavoriteRecipesUser(user.id);
+  const favorites = await getRecipesAndIngredientsSetFavoriteUser(user.id);
 
   return {
     props: {

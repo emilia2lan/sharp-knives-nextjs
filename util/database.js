@@ -283,3 +283,17 @@ export async function getUserByToken(token) {
 
   return camelcaseRecords(users)[0];
 }
+
+export async function getRecipesAndIngredientsSetFavoriteUser(id) {
+  const favoritesRecipes = await sql`
+  SELECT
+r.name,
+r.img,
+users_recipes.recipes_id
+FROM
+recipes as r,
+users_recipes
+WHERE r.id = users_recipes.recipes_id
+AND  users_recipes.user_id = ${id};`;
+  return camelcaseRecords(favoritesRecipes);
+}
