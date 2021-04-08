@@ -2,7 +2,7 @@ import camelcaseKeys from 'camelcase-keys';
 import postgres from 'postgres';
 
 import { generateToken } from './sessions';
-import setPostgresDefaultsOnHeroku from './setPostgresDefaultOnHeroku';
+import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
 
 setPostgresDefaultsOnHeroku();
 
