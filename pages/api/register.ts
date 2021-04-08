@@ -17,7 +17,7 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   const { username, password } = req.body;
-  const userAlreadyExist = (await getUserByUsername(username)) !== 'undefined';
+  const userAlreadyExist = (await getUserByUsername(username)) !== undefined;
 
   if (userAlreadyExist) {
     return res
