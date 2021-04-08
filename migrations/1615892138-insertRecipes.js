@@ -104,6 +104,23 @@ const insertRecipesToRecipesTable = [
     prep_time: '15',
     img: '/raspberriesmuffin.jpg',
   },
+
+  {
+    name: 'Tiroler Gröstl',
+    instructions:
+      'Heat the oil in a large frying pan, then fry the bacon and onion together for 10 minutes until the bacon is golden. Lift it out of the pan and set aside. Now add the potatoes to the pan and let them fry for about 10 minutes until golden. Sprinkle the caraway and paprika, season well, then fry for another minute, stirring to release their fragrance. Return the bacon and onion, taste for seasoning, then add the parsley. Serve hot and - for a real authentic touch - with a fried egg on top.',
+    cooking_time: '30',
+    prep_time: '10',
+    img: '/tirolgrostl.jpg',
+  },
+  {
+    name: 'Kjötsúpa – Icelandic Lamb Soup',
+    instructions:
+      'Trim away any silverskin and extra fat, and then cutting it into just over bite-size pieces. Transfer the meat into your favorite stewing pot, cover with water and season liberally with salt. While the water is coming up to temperature prepare the vegetables; peel them and cut into nice chunky pieces. Except for the onion, you want to dice that quite finely. Keep an eye on the meat, and as it reaches simmering, make try and capture some of the scum from the surface (this promotes a cleaner soup). Let the meat simmer for 45 minutes to an hour, depending on the size of the meat, or until reaching tender.',
+    cooking_time: '40',
+    prep_time: '20',
+    img: '/kjotsupaiceland.jpg',
+  },
 ];
 
 exports.up = async (sql) => {

@@ -138,6 +138,31 @@ const junction = [
       'raspberries',
     ],
   },
+
+  {
+    recipeName: 'Tiroler Gröstl',
+    ingredients: [
+      'vegetable oil',
+      'bacon',
+      'onion',
+      'potatoes',
+      'caraway seeds',
+      'eggs',
+      'hot sweet paprika',
+    ],
+  },
+  {
+    recipeName: 'Kjötsúpa – Icelandic Lamb Soup',
+    ingredients: [
+      'lamb shoulder',
+      'carrots',
+      'cabbage',
+      'onion',
+      'vegetable stock',
+      'water',
+      'swede',
+    ],
+  },
 ];
 
 exports.up = async (sql) => {

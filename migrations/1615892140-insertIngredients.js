@@ -64,8 +64,17 @@ VALUES
   ('cherry'),
   ('raspberries'),
   ('vanilla extract'),
-  ('baking powder')
-  ;`;
+  ('baking powder'),
+  ('bacon'),
+  ('onion'),
+  ('caraway seeds'),
+  ('hot sweet paprika'),
+  ('lamb shoulder'),
+  ('swede'),
+  ('cabbage'),
+  ('vegetable stock'),
+  ('water')
+  `;
 };
 
 exports.down = async function (sql) {
