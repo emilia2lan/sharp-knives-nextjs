@@ -61,6 +61,49 @@ const insertRecipesToRecipesTable = [
     prep_time: '195',
     img: '/pizza.jpg',
   },
+
+  {
+    name: 'Speckled Trout in capers and white wine',
+    instructions:
+      'Preheat oven to 400 degrees F (200 degrees C). Line a baking dish with aluminum foil. Place trout in the middle of the aluminum foil; top with butter, lemon pepper, capers, and paprika. Pour cooking wine over trout. Close foil around the trout. Bake in the preheated oven until fish flakes easily with a fork, about 30 minutes. Garnish trout with parsley. Enjoy!',
+    cooking_time: '30',
+    prep_time: '10',
+    img: '/troutwine.jpg',
+  },
+  {
+    name: 'Garlic chicken thighs',
+    instructions:
+      'Preheat the oven to 400 degrees F (200 degrees C). Season chicken thighs with salt and pepper. Melt 2 tablespoons butter in a large oven-proof skillet over medium-high heat. Add chicken, skin-side down, and sear until brown, 2 to 3 minutes per side. Remove chicken to a plate. Melt remaining butter in the skillet. Add garlic; cook and stir until fragrant, 1 to 2 minutes. Remove from heat and stir in brown sugar, honey, oregano, thyme, and basil until well combined. Enjoy! ',
+    cooking_time: '35',
+    prep_time: '10',
+    img: '/garlicthights.jpg',
+  },
+
+  {
+    name: 'Quick beef stir-fry',
+    instructions:
+      'Heat vegetable oil in a large wok or skillet over medium-high heat; cook and stir beef until browned, 3 to 4 minutes. Move beef to the side of the wok and add broccoli, bell pepper, carrots, green onion, and garlic to the center of the wok. Cook and stir vegetables for 2 minutes. Stir beef into vegetables and season with soy sauce and sesame seeds. Continue to cook and stir until vegetables are tender, about 2 more minutes. Serve hot!',
+    cooking_time: '10',
+    prep_time: '15',
+    img: '/beefstirfry.jpg',
+  },
+
+  {
+    name: 'Cherry berry cheesecake dessert',
+    instructions:
+      'In medium bowl, mix cracker crumbs, melted buttery sticks, and 2 tablespoons powdered sugar. Press in bottom and 1/2 inch up sides of 9-inch springform pan. Set aside. In large bowl, beat cream cheese substitute and 1/2 cup powdered sugar with electric mixer on low speed. Beat on medium speed until smooth and creamy, slowly adding 1/4 cup of the almondmilk. Stop mixer. Add pudding mix. Beat on low speed until mixed. Beat on medium speed until smooth. Slowly add remaining almondmilk; beat until smooth and creamy. Spread filling over crust. Cover loosely and refrigerate at least 6 hours.  ',
+    cooking_time: '45',
+    prep_time: '15',
+    img: '/cheesecake.jpg',
+  },
+  {
+    name: 'Raspberry Muffins',
+    instructions:
+      'Heat oven to 180 C. Line a 12-cup muffin tin with paper liners or coat it with cooking spray, vegetable oil, or butter. In a medium bowl, combine the flour, the sugar, the baking powder, and salt. Add the butter and combine. In a second bowl, whisk together the milk, egg, and vanilla. Gradually add the milk mixture to the flour mixture and stir until just combined; the batter will be lumpy. Toss the berries with the remaining flour in a bowl. Gently fold the berry mixture into the batter. Sprinkle the batter with the remaining sugar. Bake for 17 to 20 minutes or until a toothpick inserted into the center of a muffin comes out clean. Transfer pan to a wire rack to cool for 10 minutes. Serve warm!',
+    cooking_time: '35',
+    prep_time: '15',
+    img: '/raspberriesmuffin.jpg',
+  },
 ];
 
 exports.up = async (sql) => {

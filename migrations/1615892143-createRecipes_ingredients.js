@@ -23,6 +23,7 @@ const junction = [
       'avocado',
       'soy sauce',
       'ginger',
+      'salmon',
     ],
   },
 
@@ -80,6 +81,61 @@ const junction = [
       'pesto',
       'ham',
       'tomatoes',
+    ],
+  },
+  {
+    recipeName: 'Speckled Trout in capers and white wine',
+    ingredients: [
+      'speckled trout',
+      'capers',
+      'butter',
+      'white cooking wine',
+      'fresh parsley',
+    ],
+  },
+
+  {
+    recipeName: 'Garlic chicken thighs',
+    ingredients: ['chicken thighs', 'butter', 'honey', 'garlic', 'oregano'],
+  },
+  {
+    recipeName: 'Quick beef stir-fry',
+    ingredients: [
+      'vegetable oil',
+      'beef sirloin',
+      'broccoli',
+      'red bell pepper',
+      'carrots',
+      'green onion',
+      'sesame seeds',
+      'garlic',
+      'soy sauce',
+    ],
+  },
+
+  {
+    recipeName: 'Cherry berry cheesecake dessert',
+    ingredients: [
+      'graham cracker crumbs',
+      'butter',
+      'powdered sugar',
+      'cream cheese',
+      'cherry',
+    ],
+  },
+
+  {
+    recipeName: 'Raspberry Muffins',
+    ingredients: [
+      'all purpose flour',
+      'sugar',
+      'baking powder',
+      'salt',
+      'butter',
+      'milk',
+      'eggs',
+      'vanilla extract',
+      'raspberries',
     ],
   },
 ];

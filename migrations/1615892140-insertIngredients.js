@@ -45,8 +45,26 @@ VALUES
 	('mushrooms'),
 	('fresh basil'),
 	('pesto'),
-	('ham')
-
+	('ham'),
+  ('speckled trout'),
+  ('salmon'),
+  ('capers'),
+  ('white cooking wine'),
+  ('fresh parsley'),
+  ('chicken thighs'),
+  ('honey'),
+  ('beef sirloin'),
+  ('broccoli'),
+  ('red bell pepper'),
+  ('carrots'),
+  ('green onion'),
+  ('sesame seeds'),
+  ('graham cracker crumbs'),
+  ('powdered sugar'),
+  ('cherry'),
+  ('raspberries'),
+  ('vanilla extract'),
+  ('baking powder')
   ;`;
 };
 
