@@ -88,6 +88,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { createSessionWithCookie } = await import('../util/sessions');
 
   let session = await getSessionByToken(context.req.cookies.session);
+  if (
+    context.req.headers.host &&
+    context.req.headers['x-forwarded-proto'] &&
+    context.req.headers['x-forwarded-proto'] !== 'https'
+  ) {
+    return {
+      redirect: {
+        destination: `https://${context.req.headers.host}/login`,
+        permanent: true,
+      },
+    };
+  }
+
   // if the user has already a valid cookie, it gets redirected to homepage and does not allow visiting the login page
   if (session?.userId) {
     return {
