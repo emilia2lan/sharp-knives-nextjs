@@ -121,6 +121,21 @@ const insertRecipesToRecipesTable = [
     prep_time: '20',
     img: '/kjotsupaiceland.jpg',
   },
+  {
+    name:'Papanași',
+    instructions:'Grate or crumble the cheese and add it to a large bowl. Mix in the egg, sugar, lemon zest and bicarbonate of soda. Add the flour and knead until you get a dough that is still very slightly sticky. Shape it into a ball. Let the dough to rest for about 15-20 minutes. Divide the dough into 4 smaller balls. To make the doughnut, just use your thumbprint to make a hole in the middle of the dough and give it a nice round shape. Heat up a large pan and add the oil. Add one doughnut and one ball and let them fry on each side for about 2 minutes until golden. Remove with a spatula and transfer to a plate lined with kitchen towel to absorbe any excess oil. Serve with sour cream and jam.',
+    cooking_time:'10',
+    prep_time:'45',
+    img:'/papanasi.jpg',
+    },
+
+    {
+      name:'Egg sandwich',
+      instructions:'Crack four eggs into a bowl and beat them, seasoning well with salt and pepper. In a frying pan over medium heat, melt one tablespoon of butter before pouring in the beaten eggs. Tilt the pan to evenly spread out the egg. Immediately place two pieces of bread into the egg mixture and flip them around after one side is coated. Let the egg cook for one to two minutes. Using a large spatula, flip the entire omelette over and let the egg cook on the other side. Sprinkle shredded cheese, chopped bell peppers, ham, or other ingredients of your choice onto one half of the omelette. Using a spatula, fold over the excess omelette wings such that it looks like a long rectangle. Fold the rectangle in half by flipping one slice of bread over the other. Cut the sandwich in half and serve. ',
+      cooking_time:'10',
+      prep_time:'5',
+      img:'/sandwich.jpg',
+      },
 ];
 
 exports.up = async (sql) => {

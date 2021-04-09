@@ -73,8 +73,17 @@ VALUES
   ('swede'),
   ('cabbage'),
   ('vegetable stock'),
-  ('water')
-  `;
+  ('water'),
+  ('pot cheese'),
+  ('zest of one lemon'),
+  ('jam'),
+  ('sour cream'),
+  ('pot cheese'),
+  ('zest of one lemon'),
+  ('jam'),
+  ('sliced bread'),
+  ('shredded cheese')
+    `;
 };
 
 exports.down = async function (sql) {

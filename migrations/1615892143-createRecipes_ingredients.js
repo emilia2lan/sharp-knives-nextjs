@@ -163,6 +163,32 @@ const junction = [
       'swede',
     ],
   },
+
+  {
+    recipeName: 'Papanași',
+    ingredients: [
+      'pot cheese',
+      'eggs',
+      'all purpose flour',
+      'baking soda',
+      'zest of one lemon',
+      'sugar',
+      'vegetable oil',
+      'sour cream',
+      'jam',
+    ],
+  },
+  {
+    recipeName: 'Egg sandwich',
+    ingredients: [
+      'eggs',
+      'butter',
+      'sliced bread',
+      'ham',
+      'shredded cheese',
+      'red bell pepper',
+       ],
+  },
 ];
 
 exports.up = async (sql) => {
