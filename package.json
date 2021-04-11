@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.3.0",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/styles": "^4.11.3",
     "argon2": "^0.27.1",
-    "bootstrap": "^5.0.0-beta3",
     "camelcase-keys": "^6.2.2",
     "cookie": "^0.4.1",
     "csrf": "^3.1.0",

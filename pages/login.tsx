@@ -4,16 +4,40 @@ import {
   useState,
 } from 'react';
 
-import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
+import styled from '@emotion/styled';
+import {
+  Button,
+  TextField,
+} from '@material-ui/core';
+
 type Props = {
   csrfToken: string;
   setIsSessionStateStale: Dispatch<SetStateAction<boolean>>;
+  children: React.ReactNode;
 };
 
+const LayoutWrapper = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const LayoutWrapperTwo = styled('div')`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+`;
+const LayoutWrapperTree = styled('div')`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+`;
 export default function Login(props: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -26,61 +50,8 @@ export default function Login(props: Props) {
         <link rel="logo" href="/logoSharpKnives.svg" />
       </Head>
 
-      <section>
-        <p>Here is Login page</p>
-
-        <form
-          onSubmit={async (event) => {
-            event.preventDefault();
-            const response = await fetch('/api/login', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                username,
-                password,
-                csrfToken: props.csrfToken,
-              }),
-            });
-
-            const { errors: returnedErrors } = await response.json();
-            if (returnedErrors) {
-              setErrors(returnedErrors);
-              return;
-            }
-
-            const returnTo = Array.isArray(router.query.returnTo)
-              ? router.query.returnTo[0]
-              : router.query.returnTo;
-
-            router.push(returnTo || `/recipes`);
-            props.setIsSessionStateStale(true);
-          }}
-        >
-          <label>
-            username:
-            <input
-              value={username}
-              onChange={(event) => setUsername(event.currentTarget.value)}
-            />
-          </label>
-          <label>
-            password:
-            <input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.currentTarget.value)}
-            />
-          </label>
-          <button type="submit">Login</button>
-        </form>
-        {errors.map((error) => (
-          <div style={{ color: 'red' }} key={`error-message-${error.message}`}>
-            {' '}
-            {error.message}
-          </div>
-        ))}
+      <LayoutWrapper>
+        {props.children}
 
         <Image
           className="backgroundImage"
@@ -89,7 +60,87 @@ export default function Login(props: Props) {
           width={450}
           height={300}
         />
-      </section>
+        <LayoutWrapperTwo>
+          <h3>Please Login </h3>
+          <form
+            onSubmit={async (event) => {
+              event.preventDefault();
+              const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  username,
+                  password,
+                  csrfToken: props.csrfToken,
+                }),
+              });
+
+              const { errors: returnedErrors } = await response.json();
+              if (returnedErrors) {
+                setErrors(returnedErrors);
+                return;
+              }
+
+              const returnTo = Array.isArray(router.query.returnTo)
+                ? router.query.returnTo[0]
+                : router.query.returnTo;
+
+              router.push(returnTo || `/recipes`);
+              props.setIsSessionStateStale(true);
+            }}
+          >
+            <div>
+              <TextField
+                id="outlined-basic"
+                label="Username"
+                variant="outlined"
+                style={{
+                  marginBottom: '15px',
+                }}
+                value={username}
+                onChange={(event) => setUsername(event.currentTarget.value)}
+              />
+            </div>
+            <div>
+              <TextField
+                id="outlined-basic"
+                label="Password"
+                variant="outlined"
+                style={{
+                  marginBottom: '15px',
+                }}
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.currentTarget.value)}
+              />
+            </div>
+            <LayoutWrapperTree>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                style={{
+                  maxWidth: '250px',
+                  justifyContent: 'center',
+                }}
+              >
+                Login
+              </Button>{' '}
+            </LayoutWrapperTree>
+          </form>
+          {errors.map((error) => (
+            <div
+              style={{ color: 'red' }}
+              key={`error-message-${error.message}`}
+            >
+              {' '}
+              {error.message}
+            </div>
+          ))}
+        </LayoutWrapperTwo>
+      </LayoutWrapper>
     </>
   );
 }

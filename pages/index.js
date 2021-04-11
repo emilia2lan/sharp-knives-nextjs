@@ -6,51 +6,33 @@ import Link from 'next/link';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { Button } from '@material-ui/core';
 
 const section = css`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const card = css`
+  display: flex;
+  flex-direction: column;
   margin: 20px;
   object-fit: cover;
   font-family: sans-serif;
   justify-content: center;
-  @media (max-width: 1000px) {
-    grid-template-columns: 2fr;
-    grid-template-rows: 150px 300px 1fr;
-    margin: 50px 30px;
-  }
+  border-radius: 20px;
+  width: 450px;
+  max-width: 400px;
+  max-height: 600px;
+  border: 2px solid red;
+  align-items: center;
+
   .image {
-    grid-column: 2 / 4;
-    grid-row: 1 / 2;
-    z-index: 2;
     border-radius: 20px;
-    @media (max-width: 1000px) {
-      grid-column: 2 / 1;
-      grid-row: 2 / 2;
-      border-radius: 20px 20px 0 0;
-      display: flex;
-      justify-content: center;
-      z-index: 0;
-    }
-    @media (max-width: 500px) {
-      border-radius: 0;
-      z-index: 0;
-    }
+    border: 2px solid red;
   }
   a {
     text-decoration: none;
-    justify-content: center;
-    grid-column: 1 / 4;
-    grid-row: 2 / 2;
-  }
-  h3 {
-    font-family: sans-serif;
-    justify-content: center;
-  }
-  button {
-    grid-column: 3 / 4;
-    grid-row: 1 / 2;
   }
 `;
 
@@ -71,26 +53,32 @@ export default function Home(props) {
       <Head>
         <link rel="logo" href="/logoSharpKnives.svg" />
       </Head>
-      <h3>Looking for ideas? Hit the button...</h3>
-      <section css={section}>
-        <Image
-          className="image"
-          src={randomRecipe.img}
-          alt="a picture of the final result of the recipe"
-          width={320}
-          height={320}
-        />{' '}
-        <Link className="link" href={`/recipes/${randomRecipe.id}`}>
-          <a>{randomRecipe.name}</a>
-        </Link>
-        <button
+      <div css={section}>
+        <div css={card}>
+          <p>Looking for ideas? Hit the button...</p>
+          <Image
+            className="image"
+            src={randomRecipe.img}
+            alt="a picture of the final result of the recipe"
+            width={320}
+            height={320}
+          />{' '}
+          <Link className="link" href={`./recipes/${randomRecipe.id}`}>
+            <a>{randomRecipe.name}</a>
+          </Link>
+        </div>
+
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ maxWidth: '250px' }}
           onClick={() => {
             getRandomRecipe();
           }}
         >
           Random recipe!
-        </button>
-      </section>
+        </Button>
+      </div>
     </>
   );
 }

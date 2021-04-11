@@ -11,3 +11,8 @@ export type Favorites = {
   userId: number;
   recipesId: number;
 };
+
+export type ComponentProps {
+  className?: string;
+  label: string;
+}
