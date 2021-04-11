@@ -40,6 +40,7 @@ export default function App({ Component, pageProps }) {
         styles={css`
           html,
           body {
+            overflow-x: hidden;
             margin: 0;
             min-height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,

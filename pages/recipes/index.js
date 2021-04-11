@@ -10,51 +10,43 @@ import { useRouter } from 'next/router';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { TextField } from '@material-ui/core';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import {
   getFavorite,
   getUserByToken,
 } from '../../util/database.js';
 
-const section = css`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 15px;
-  margin: 20px;
-  object-fit: cover;
-  font-family: sans-serif;
-  justify-content: center;
-  @media (max-width: 1000px) {
-    grid-template-columns: 1fr;
-    grid-template-rows: 150px 300px 1fr;
-    margin: 50px 30px;
-  }
-  .image {
-    grid-column: 1 / 3;
-    grid-row: 3 / 4;
-    background-color: #fafcff;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: 2;
-    border-radius: 20px;
-
-    @media (max-width: 1000px) {
-      grid-column: 1 / 1;
-      grid-row: 2 / 2;
-      border-radius: 20px 20px 0 0;
-      display: flex;
-      justify-content: center;
-      z-index: 0;
-    }
-    @media (max-width: 500px) {
-      border-radius: 0;
-      z-index: 0;
-    }
+const searchBar = css`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  div {
+    flex-flow: column nowrap;
   }
 `;
-const header = css`
-  position: top;
+
+const section = css`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin: 20px;
+  margin-left: 30px;
+
+  .favoriteButton {
+    position: relative;
+    min-height: 50px;
+  }
+  .image {
+    border-radius: 20px;
+  }
+
+  a {
+    text-decoration: none;
+    justify-content: space-evenly;
+  }
 `;
 
 export default function Recipes(props) {
@@ -143,55 +135,65 @@ export default function Recipes(props) {
       <Head>
         <link rel="logo" href="/logoSharpKnives.svg" />
       </Head>
-      <h1 css={header}>Today`s featured recipes</h1>
-      <input
-        type="text"
-        value={searchValue}
-        onChange={(event) => {
-          setSearchValue(event.target.value);
-        }}
-        name="searchBar"
-        id="searchBar"
-        placeholder="search for an ingredient"
-      />
-      <section css={section}>
+
+      <div css={searchBar}>
+        <h3>Today`s featured recipes</h3>
+        <TextField
+          id="standard-basic"
+          label="Search..."
+          type="text"
+          value={searchValue}
+          onChange={(event) => {
+            setSearchValue(event.target.value);
+          }}
+          name="searchBar"
+        />{' '}
+      </div>
+
+      <div css={section}>
         {recipesWithIngredientsState.map((recipe) => (
           <div key={recipe.name}>
             <Image
               className="image"
               src={recipe.img}
               alt="a picture of the final result of the recipe"
-              width={320}
-              height={320}
+              width={350}
+              height={350}
               resizeMode
             />
-
-            <button
-              type="button"
-              onClick={() => {
-                if (!props.isSessionValid) {
-                  alert('To add to favorite you have to log in');
-                  router.push('/login');
-                  return;
-                }
-                handleClickFavorite(recipe.id, props.userId);
-              }}
-            >
-              {favorites.find((favorite) => {
-                return favorite.recipesId === recipe.id;
-              })
-                ? '💖'
-                : '🖤'}
-            </button>
-            <h1>
-              {' '}
+            <div className="favoriteButton">
+              <button
+                type="button"
+                style={{
+                  position: 'absolute',
+                  right: '5px',
+                  backgroundColor: 'white',
+                  border: '0px',
+                }}
+                onClick={() => {
+                  if (!props.isSessionValid) {
+                    alert('To add to favorite you have to log in');
+                    router.push('/login');
+                    return;
+                  }
+                  handleClickFavorite(recipe.id, props.userId);
+                }}
+              >
+                {favorites.find((favorite) => {
+                  return favorite.recipesId === recipe.id;
+                }) ? (
+                  <FavoriteIcon color="secondary" />
+                ) : (
+                  <FavoriteIcon color="action" />
+                )}
+              </button>
               <Link className="link" href={`/recipes/${recipe.id}`}>
                 {recipe.name}
               </Link>
-            </h1>
+            </div>
           </div>
         ))}
-      </section>
+      </div>
     </>
   );
 }

@@ -24,7 +24,7 @@ const card = css`
   width: 450px;
   max-width: 400px;
   max-height: 600px;
-  border: 2px solid red;
+  border: 2px solid #0099cc;
   align-items: center;
 
   .image {
@@ -70,8 +70,12 @@ export default function Home(props) {
 
         <Button
           variant="contained"
-          color="primary"
-          style={{ maxWidth: '250px' }}
+          color="default"
+          style={{
+            maxWidth: '250px',
+            backgroundColor: '#0099cc',
+            color: 'white',
+          }}
           onClick={() => {
             getRandomRecipe();
           }}

@@ -9,11 +9,12 @@ const navBar = css`
   display: flex;
   top: 0;
   width: 100vw;
-  background-color: #778899;
+  background-color: #0099cc;
   padding-top: 5px;
   margin: 0 auto;
   margin-left: 0;
   z-index: 2;
+
 
   a {
     margin: auto;
