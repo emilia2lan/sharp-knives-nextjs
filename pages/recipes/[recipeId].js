@@ -5,8 +5,29 @@ import Image from 'next/image';
 import { css } from '@emotion/react';
 
 const section = css`
-  display: flex;
-  margin: 25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-gap: 15px;
+  margin: 20px;
+
+  justify-content: center;
+  @media (max-width: 1000px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 150px 300px 1fr;
+    margin: 50px 30px;
+  }
+  @media (max-width: 500px) {
+    margin: 50px 0;
+  }
+  .instructions {
+    grid-column: 2 / 2;
+    grid-row: 1 / 2;
+  }
+  .ingredients {
+    grid-column: 2 / 2;
+    grid-row: 2 / 2;
+  }
 `;
 
 export default function GetRecipe(props) {
@@ -21,26 +42,25 @@ export default function GetRecipe(props) {
         <link rel="logo" href="/logoSharpKnives.svg" />
       </Head>
 
-      <div css={section}>
-        <section className="container">
-          <h1>{recipe.name}</h1>
-          <Image
-            src={recipe.image}
-            alt="a picture of the final result of the recipe"
-            width={500}
-            height={500}
-          />
-          <p> Instructions: {recipe.instructions}</p>
-          <p> Cooking time: {recipe.cookingTime}</p>
-          <p> Prep Time: {recipe.prepTime}</p>
-          <ul>
-            {' '}
-            {recipe.ingredients.map((i) => {
-              return <li key={i}>{i}</li>;
-            })}
-          </ul>
-        </section>
-      </div>
+      <h3>{recipe.name}</h3>
+      <section css={section}>
+        <Image
+          src={recipe.image}
+          alt="a picture of the final result of the recipe"
+          width={350}
+          height={350}
+        />
+        <ul className="ingredients">
+          {' '}
+          Ingredients{' '}
+          {recipe.ingredients.map((i) => {
+            return <li key={i}>{i}</li>;
+          })}
+        </ul>
+        <p className="instructions"> Instructions: {recipe.instructions}</p>
+        <p> Cook: {recipe.cookingTime} mins</p>
+        <p> Prep: {recipe.prepTime} mins</p>
+      </section>
     </>
   );
 }

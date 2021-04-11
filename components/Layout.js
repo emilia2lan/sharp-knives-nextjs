@@ -7,7 +7,6 @@ import { css } from '@emotion/react';
 
 const navBar = css`
   display: flex;
-
   top: 0;
   width: 100vw;
   background-color: #ac92a6;

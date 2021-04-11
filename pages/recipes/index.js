@@ -19,9 +19,44 @@ import {
 const section = css`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  margin: 25px;
+  grid-gap: 15px;
+  margin: 20px;
   object-fit: cover;
+  font-family: sans-serif;
+  justify-content: center;
+  @media (max-width: 1000px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 150px 300px 1fr;
+    margin: 50px 30px;
+  }
+  .image {
+    grid-column: 1 / 3;
+    grid-row: 3 / 4;
+    background-color: #fafcff;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 2;
+    border-radius: 20px;
+
+    @media (max-width: 1000px) {
+      grid-column: 1 / 1;
+      grid-row: 2 / 2;
+      border-radius: 20px 20px 0 0;
+      display: flex;
+      justify-content: center;
+      z-index: 0;
+    }
+    @media (max-width: 500px) {
+      border-radius: 0;
+      z-index: 0;
+    }
+  }
 `;
+const header = css`
+  position: top;
+`;
+
 export default function Recipes(props) {
   const [
     recipesWithIngredientsState,
@@ -108,7 +143,7 @@ export default function Recipes(props) {
       <Head>
         <link rel="logo" href="/logoSharpKnives.svg" />
       </Head>
-      <h1>Here are your favorite recipes</h1>
+      <h1 css={header}>Today`s featured recipes</h1>
       <input
         type="text"
         value={searchValue}
@@ -130,11 +165,12 @@ export default function Recipes(props) {
               height={320}
               resizeMode
             />
+
             <button
               type="button"
               onClick={() => {
                 if (!props.isSessionValid) {
-                  alert('please log in');
+                  alert('To add to favorite you have to log in');
                   router.push('/login');
                   return;
                 }

@@ -6,6 +6,7 @@ import {
 
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 type Props = {
@@ -27,59 +28,68 @@ export default function Login(props: Props) {
 
       <section>
         <p>Here is Login page</p>
+
+        <form
+          onSubmit={async (event) => {
+            event.preventDefault();
+            const response = await fetch('/api/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                username,
+                password,
+                csrfToken: props.csrfToken,
+              }),
+            });
+
+            const { errors: returnedErrors } = await response.json();
+            if (returnedErrors) {
+              setErrors(returnedErrors);
+              return;
+            }
+
+            const returnTo = Array.isArray(router.query.returnTo)
+              ? router.query.returnTo[0]
+              : router.query.returnTo;
+
+            router.push(returnTo || `/recipes`);
+            props.setIsSessionStateStale(true);
+          }}
+        >
+          <label>
+            username:
+            <input
+              value={username}
+              onChange={(event) => setUsername(event.currentTarget.value)}
+            />
+          </label>
+          <label>
+            password:
+            <input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.currentTarget.value)}
+            />
+          </label>
+          <button type="submit">Login</button>
+        </form>
+        {errors.map((error) => (
+          <div style={{ color: 'red' }} key={`error-message-${error.message}`}>
+            {' '}
+            {error.message}
+          </div>
+        ))}
+
+        <Image
+          className="backgroundImage"
+          src="/login.jfif"
+          alt="a picture of the final result of the recipe"
+          width={450}
+          height={300}
+        />
       </section>
-      <form
-        onSubmit={async (event) => {
-          event.preventDefault();
-          const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              username,
-              password,
-              csrfToken: props.csrfToken,
-            }),
-          });
-
-          const { errors: returnedErrors } = await response.json();
-          if (returnedErrors) {
-            setErrors(returnedErrors);
-            return;
-          }
-
-          const returnTo = Array.isArray(router.query.returnTo)
-            ? router.query.returnTo[0]
-            : router.query.returnTo;
-
-          router.push(returnTo || `/recipes`);
-          props.setIsSessionStateStale(true);
-        }}
-      >
-        <label>
-          username:
-          <input
-            value={username}
-            onChange={(event) => setUsername(event.currentTarget.value)}
-          />
-        </label>
-        <label>
-          password:
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.currentTarget.value)}
-          />
-        </label>
-        <button type="submit">Login</button>
-      </form>
-      {errors.map((error) => (
-        <div style={{ color: 'red' }} key={`error-message-${error.message}`}>
-          {' '}
-          {error.message}
-        </div>
-      ))}
     </>
   );
 }

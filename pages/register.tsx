@@ -6,6 +6,7 @@ import {
 
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { Error } from '../util/types';
@@ -26,7 +27,10 @@ export default function Register(props: Props) {
       </Head>
 
       <section>
-        <p>Here is register page</p>
+        <p>
+          Hi there and welcome to Sharp Knives! Create an account to add your
+          favorites recipes and keep in touch with us.
+        </p>
       </section>
       <form
         onSubmit={async (event) => {
@@ -76,6 +80,13 @@ export default function Register(props: Props) {
           {error.message}
         </div>
       ))}
+      <Image
+        className="backgroundImage"
+        src="/register.jfif"
+        alt="a picture of the final result of the recipe"
+        width={450}
+        height={300}
+      />
     </>
   );
 }

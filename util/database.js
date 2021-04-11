@@ -8,7 +8,7 @@ setPostgresDefaultsOnHeroku();
 
 require('dotenv-safe').config();
 
-// one time connection to the dataBase watch_you_got
+// one time connection to the dataBase
 function connectToDataBase() {
   let sql;
 

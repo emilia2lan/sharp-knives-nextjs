@@ -6,6 +6,7 @@ import {
 
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 
 type Props = {
   setIsSessionStateStale: Dispatch<SetStateAction<boolean>>;
@@ -17,10 +18,17 @@ export default function Logout(props: Props) {
   return (
     <>
       <Head>
-        <title>Logged out successfully</title>
+        <title> You are logged out successfully</title>
       </Head>
 
-      <h1>Logged out successfully</h1>
+      <h1>Sorry to see you go... You logged out successfully</h1>
+      <Image
+        className="backgroundImage"
+        src="/logout.jfif"
+        alt="a picture of the final result of the recipe"
+        width={450}
+        height={300}
+      />
     </>
   );
 }
