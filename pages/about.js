@@ -40,7 +40,7 @@ export default function About() {
           alt="a picture of the final result of the recipe"
           width={450}
           height={300}
-          resizeMode
+
         />
       </section>
     </>

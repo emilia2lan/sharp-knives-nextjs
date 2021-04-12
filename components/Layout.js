@@ -15,7 +15,6 @@ const navBar = css`
   margin-left: 0;
   z-index: 2;
 
-
   a {
     margin: auto;
     text-decoration: none;
@@ -44,34 +43,34 @@ export default function Layout(props) {
         <nav css={navBar}>
           <Image src="/logoSharpKnives.svg" width={40} height={40} alt="logo" />
 
-          <Link href="./">
+          <Link href="/">
             <a>Sharp Knives</a>
           </Link>
 
-          <Link href="./recipes">
+          <Link href="/recipes">
             <a>Recipes</a>
           </Link>
 
-          <Link href="./about">
+          <Link href="/about">
             <a> About </a>
           </Link>
           <div>
             {!props.isSessionValid ? (
               <>
-                <Link href="./register">
+                <Link href="/register">
                   <a> Register / </a>
                 </Link>
 
-                <Link href="./login">
+                <Link href="/login">
                   <a> Login </a>
                 </Link>
               </>
             ) : (
               <>
-                <Link href={`./profile/${props.children.props.userId}`}>
+                <Link href={`/profile/${props.children.props.userId}`}>
                   <a> My profile / </a>
                 </Link>
-                <Link href="./logout">
+                <Link href="/logout">
                   <a> Logout </a>
                 </Link>
               </>

@@ -159,7 +159,6 @@ export default function Recipes(props) {
               alt="a picture of the final result of the recipe"
               width={350}
               height={350}
-              resizeMode
             />
             <div className="favoriteButton">
               <button
