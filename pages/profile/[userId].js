@@ -13,6 +13,7 @@ import {
 const section = css`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-around;
   div {
     flex-flow: column nowrap;
@@ -23,6 +24,7 @@ const section = css`
   }
   a {
     text-decoration: none;
+    justify-content: space-evenly;
   }
 `;
 export default function Profile(props) {
@@ -42,7 +44,10 @@ export default function Profile(props) {
       <Head>
         <title>User Profile: {props.user.username}</title>
       </Head>
-      <h1>Hi {props.user.username}, here are your favorite recipes</h1>
+      <h3 style={{ paddingLeft: '20px' }}>
+        Hi {props.user.username}, <br />
+        here are your favorite recipes:
+      </h3>
 
       <section css={section}>
         {props.favorites.map((recipe) => {

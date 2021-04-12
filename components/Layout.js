@@ -5,6 +5,8 @@ import Link from 'next/link';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
+import Footer from './Footer';
+
 const navBar = css`
   display: flex;
   top: 0;
@@ -78,7 +80,9 @@ export default function Layout(props) {
           </div>
         </nav>
       </header>
+
       {props.children}
+      <Footer />
     </>
   );
 }
