@@ -32,6 +32,7 @@ const card = css`
     border: 2px solid red;
   }
   a {
+    padding: 15px;
     text-decoration: none;
   }
 `;

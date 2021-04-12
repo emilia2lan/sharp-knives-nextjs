@@ -11,40 +11,18 @@ import {
 } from '../../util/database';
 
 const section = css`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 15px;
-  margin: 20px;
-  object-fit: cover;
-  font-family: sans-serif;
-  justify-content: center;
-  @media (max-width: 1000px) {
-    grid-template-columns: 1fr;
-    grid-template-rows: 150px 300px 1fr;
-    margin: 50px 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  div {
+    flex-flow: column nowrap;
   }
-  .image {
-    grid-column: 1 / 3;
-    grid-row: 3 / 4;
-    background-color: #fafcff;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: 2;
-    border-radius: 20px;
 
-    @media (max-width: 1000px) {
-      grid-column: 1 / 1;
-      grid-row: 2 / 2;
-      border-radius: 20px 20px 0 0;
-      display: flex;
-      justify-content: center;
-      z-index: 0;
-    }
-    @media (max-width: 500px) {
-      border-radius: 0;
-      z-index: 0;
-    }
+  .image {
+    border-radius: 20px;
+  }
+  a {
+    text-decoration: none;
   }
 `;
 export default function Profile(props) {
@@ -64,8 +42,8 @@ export default function Profile(props) {
       <Head>
         <title>User Profile: {props.user.username}</title>
       </Head>
-
       <h1>Hi {props.user.username}, here are your favorite recipes</h1>
+
       <section css={section}>
         {props.favorites.map((recipe) => {
           return (
@@ -74,16 +52,18 @@ export default function Profile(props) {
                 className="image"
                 src={recipe.img}
                 alt="a picture of the final result of the recipe"
-                width={350}
-                height={350}
+                width={300}
+                height={300}
               />
-              <Link
-                className="link"
-                key={recipe.recipesId}
-                href={`/recipes/${recipe.recipesId}`}
-              >
-                <a>{recipe.name}</a>
-              </Link>{' '}
+              <div>
+                <Link
+                  className="link"
+                  key={recipe.recipesId}
+                  href={`/recipes/${recipe.recipesId}`}
+                >
+                  <a>{recipe.name}</a>
+                </Link>{' '}
+              </div>
             </div>
           );
         })}

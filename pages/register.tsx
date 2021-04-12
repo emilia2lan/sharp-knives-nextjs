@@ -9,11 +9,43 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
+import styled from '@emotion/styled';
+import {
+  Button,
+  TextField,
+} from '@material-ui/core';
+
 import { Error } from '../util/types';
 
 type Props = {
   setIsSessionStateStale: Dispatch<SetStateAction<boolean>>;
+  children: React.ReactNode;
 };
+
+const LayoutWrapper = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  .backgroundImage {
+    border-radius: 20px;
+  }
+`;
+
+const LayoutWrapperTwo = styled('div')`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  margin-left: 20px;
+`;
+const LayoutWrapperTree = styled('div')`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  margin-left: 20px;
+`;
 export default function Register(props: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -25,68 +57,96 @@ export default function Register(props: Props) {
       <Head>
         <link rel="logo" href="/logoSharpKnives.svg" />
       </Head>
+      <LayoutWrapper>
+        {props.children}
+        <Image
+          className="backgroundImage"
+          src="/register.jfif"
+          alt="a picture of the final result of the recipe"
+          width={600}
+          height={400}
+        />
+        <LayoutWrapperTwo>
+          <h3> Please Register </h3>
 
-      <section>
-        <p>
-          Hi there and welcome to Sharp Knives! Create an account to add your
-          favorites recipes and keep in touch with us.
-        </p>
-      </section>
-      <form
-        onSubmit={async (event) => {
-          event.preventDefault();
-          const response = await fetch('/api/register', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-          });
+          <form
+            onSubmit={async (event) => {
+              event.preventDefault();
+              const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+              });
 
-          const { errors: returnedErrors } = await response.json();
-          if (returnedErrors) {
-            setErrors(returnedErrors);
-            return;
-          }
+              const { errors: returnedErrors } = await response.json();
+              if (returnedErrors) {
+                setErrors(returnedErrors);
+                return;
+              }
 
-          const returnTo = Array.isArray(router.query.returnTo)
-            ? router.query.returnTo[0]
-            : router.query.returnTo;
+              const returnTo = Array.isArray(router.query.returnTo)
+                ? router.query.returnTo[0]
+                : router.query.returnTo;
 
-          router.push(returnTo || `/login`);
-          props.setIsSessionStateStale(true);
-        }}
-      >
-        <label>
-          username:
-          <input
-            value={username}
-            onChange={(event) => setUsername(event.currentTarget.value)}
-          />
-        </label>
-        <label>
-          password:
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.currentTarget.value)}
-          />
-        </label>
-        <button type="submit">Register</button>
-      </form>
-      {errors.map((error) => (
-        <div style={{ color: 'red' }} key={`error-message-${error.message}`}>
-          {' '}
-          {error.message}
-        </div>
-      ))}
-      <Image
-        className="backgroundImage"
-        src="/register.jfif"
-        alt="a picture of the final result of the recipe"
-        width={450}
-        height={300}
-      />
+              router.push(returnTo || `/login`);
+              props.setIsSessionStateStale(true);
+            }}
+          >
+            <div>
+              <TextField
+                id="outlined-basic"
+                label="Username"
+                variant="outlined"
+                style={{
+                  marginBottom: '15px',
+                }}
+                value={username}
+                onChange={(event) => setUsername(event.currentTarget.value)}
+              />
+            </div>
+            <div>
+              <TextField
+                id="outlined-basic"
+                label="Password"
+                variant="outlined"
+                style={{
+                  marginBottom: '15px',
+                }}
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.currentTarget.value)}
+              />
+            </div>
+            <LayoutWrapperTree>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                style={{
+                  maxWidth: '120px',
+                  backgroundColor: '#0099cc',
+                  color: 'white',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                }}
+              >
+                Register
+              </Button>
+            </LayoutWrapperTree>
+          </form>
+          {errors.map((error) => (
+            <div
+              style={{ color: 'red' }}
+              key={`error-message-${error.message}`}
+            >
+              {' '}
+              {error.message}
+            </div>
+          ))}
+        </LayoutWrapperTwo>
+      </LayoutWrapper>
     </>
   );
 }

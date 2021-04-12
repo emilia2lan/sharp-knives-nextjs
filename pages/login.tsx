@@ -24,7 +24,11 @@ type Props = {
 const LayoutWrapper = styled('div')`
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  margin-top: 20px;
+  .backgroundImage {
+    border-radius: 20px;
+  }
 `;
 
 const LayoutWrapperTwo = styled('div')`
@@ -32,12 +36,14 @@ const LayoutWrapperTwo = styled('div')`
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
+  margin-left: 20px;
 `;
 const LayoutWrapperTree = styled('div')`
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
+  margin-left: 20px;
 `;
 export default function Login(props: Props) {
   const [username, setUsername] = useState('');
@@ -58,8 +64,8 @@ export default function Login(props: Props) {
           className="backgroundImage"
           src="/login.jfif"
           alt="a picture of the final result of the recipe"
-          width={450}
-          height={300}
+          width={600}
+          height={400}
         />
         <LayoutWrapperTwo>
           <h3>Please Login </h3>
@@ -121,10 +127,12 @@ export default function Login(props: Props) {
               <Button
                 type="submit"
                 variant="contained"
-                color="primary"
                 style={{
-                  maxWidth: '250px',
-                  justifyContent: 'center',
+                  maxWidth: '120px',
+                  backgroundColor: '#0099cc',
+                  color: 'white',
+                  alignItems: 'center',
+                  textAlign: 'center',
                 }}
               >
                 Login

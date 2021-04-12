@@ -8,6 +8,24 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 
+import styled from '@emotion/styled';
+
+const LogoutPage = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+  padding-left: 20px;
+  .backgroundImage {
+    border-radius: 20px;
+    padding-right: 20px;
+  }
+  p {
+    padding-left: 20px;
+  }
+`;
+
 type Props = {
   setIsSessionStateStale: Dispatch<SetStateAction<boolean>>;
 };
@@ -20,15 +38,22 @@ export default function Logout(props: Props) {
       <Head>
         <title> You are logged out successfully</title>
       </Head>
+      <h1> </h1>
+      <LogoutPage>
+        <div>
+          <Image
+            className="backgroundImage"
+            src="/logout.jfif"
+            alt="a picture of the final result of the recipe"
+            width={600}
+            height={400}
+          />
+        </div>
 
-      <h1>Sorry to see you go... You logged out successfully</h1>
-      <Image
-        className="backgroundImage"
-        src="/logout.jfif"
-        alt="a picture of the final result of the recipe"
-        width={450}
-        height={300}
-      />
+        <p>
+          Sorry to see you go... <br /> You logged out successfully
+        </p>
+      </LogoutPage>
     </>
   );
 }

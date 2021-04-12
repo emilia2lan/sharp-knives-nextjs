@@ -43,11 +43,11 @@ export default function App({ Component, pageProps }) {
             overflow-x: hidden;
             margin: 0;
             min-height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-              Oxygen;
+            font-family: 'Spectral', serif;
           }
         `}
       />
+
       <Layout isSessionValid={isSessionValid}>
         <Component
           {...pageProps}
