@@ -11,7 +11,7 @@ const iconBar = css`
   flex-direction: column;
   margin-top: 20px;
   align-items: center;
-  border-top: 1px solid #0099cc;
+  border-top: 0.5px solid #0099cc;
   min-height: 50px;
 
   div {

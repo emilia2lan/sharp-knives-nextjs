@@ -81,7 +81,14 @@ export default function Layout(props) {
         </nav>
       </header>
 
-      {props.children}
+      <main
+        style={{
+          minHeight: '82vh',
+        }}
+      >
+        {' '}
+        {props.children}
+      </main>
       <Footer />
     </>
   );

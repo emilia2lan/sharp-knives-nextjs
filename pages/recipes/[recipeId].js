@@ -12,6 +12,7 @@ const section = css`
   padding: 5px;
   flex-basis: max-content;
 
+
   .image {
     border-radius: 20px;
     margin: 20px;
